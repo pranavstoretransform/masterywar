@@ -1,0 +1,1412 @@
+landingpage:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Wars – Investigate. Deduce. Win.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0c10;
+  --surface:#111318;
+  --card:#161820;
+  --border:#252730;
+  --gold:#c8922a;
+  --gold2:#e8b04a;
+  --red:#cc3333;
+  --muted:#5e6175;
+  --text:#ccc8bc;
+  --bright:#f0ece0;
+  --green:#4caf80;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(11,12,16,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:16px 48px;backdrop-filter:blur(8px)}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--bright)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.btn-trial{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:9px 20px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-trial:hover{background:var(--gold);color:#0b0c10}
+.btn-nav-cta{background:var(--gold);border:none;color:#0b0c10;padding:10px 22px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer;transition:background .2s}
+.btn-nav-cta:hover{background:var(--gold2)}
+
+/* HERO */
+.hero{min-height:92vh;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;padding:80px 48px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 65% 50%,rgba(200,146,42,.07) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.3);color:var(--gold);padding:6px 16px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.15em;margin-bottom:24px}
+.blink{animation:blink 1.4s infinite}.@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-title{font-family:'Playfair Display',serif;font-size:64px;font-weight:900;line-height:1.04;color:var(--bright);margin-bottom:22px}
+.hero-title em{color:var(--gold);font-style:italic}
+.hero-desc{font-size:19px;line-height:1.75;color:var(--muted);max-width:460px;margin-bottom:36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{background:var(--gold);color:#0b0c10;border:none;padding:15px 34px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);padding:15px 34px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* HERO VISUAL */
+.hero-visual{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:28px;position:relative}
+.case-tag{position:absolute;top:-1px;left:20px;background:var(--gold);color:#0b0c10;font-family:'Share Tech Mono',monospace;font-size:9px;padding:3px 10px;letter-spacing:.14em}
+.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ev-box{background:var(--surface);border:1px solid var(--border);border-radius:2px;height:78px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;position:relative}
+.ev-box .pin{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--red)}
+.redline{height:1px;background:linear-gradient(90deg,transparent,var(--red) 40%,transparent);margin:14px 0}
+.suspects{display:flex;gap:8px}
+.s-chip{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:9px 8px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.05em}
+.s-chip.hot{border-color:rgba(200,146,42,.5);color:var(--gold)}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border)}
+.stat{padding:28px 20px;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--gold);line-height:1}
+.stat-l{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.1em;margin-top:6px}
+
+/* SECTION */
+.sec{padding:72px 48px;border-bottom:1px solid var(--border)}
+.sec-label{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.18em;margin-bottom:12px}
+.sec-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--bright);margin-bottom:14px;line-height:1.2}
+.sec-sub{font-size:18px;color:var(--muted);max-width:560px;line-height:1.75;margin-bottom:48px}
+
+/* TRIAL BANNER */
+.trial-banner{background:linear-gradient(135deg,rgba(200,146,42,.12) 0%,rgba(200,146,42,.04) 100%);border:1px solid rgba(200,146,42,.35);border-radius:4px;padding:36px 40px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin-bottom:56px}
+.trial-banner-inner .tag{display:inline-block;background:var(--gold);color:#0b0c10;font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:.12em;margin-bottom:14px;border-radius:1px}
+.trial-banner-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--bright);margin-bottom:10px}
+.trial-banner-desc{font-size:17px;color:var(--muted);line-height:1.65}
+.trial-case-card{background:var(--card);border:1px solid rgba(200,146,42,.3);border-radius:4px;overflow:hidden;width:260px;flex-shrink:0}
+.trial-card-img{height:120px;background:linear-gradient(135deg,#1a1208,#2a1e0a);display:flex;align-items:center;justify-content:center;position:relative}
+.trial-card-img .stamp{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.2em;border:1px solid rgba(200,146,42,.4);padding:6px 14px;transform:rotate(-6deg)}
+.trial-card-body{padding:18px}
+.trial-card-name{font-family:'Playfair Display',serif;font-size:16px;color:var(--bright);font-weight:700;margin-bottom:6px}
+.trial-card-desc{font-size:14px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+.btn-solve-trial{width:100%;background:var(--gold);color:#0b0c10;border:none;padding:11px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer;border-radius:2px;text-decoration:none;display:block;text-align:center;transition:background .2s}
+.btn-solve-trial:hover{background:var(--gold2)}
+
+/* CASE GRID */
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.case-card{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:border-color .25s,transform .25s;cursor:pointer;position:relative}
+.case-card:hover{border-color:rgba(200,146,42,.4);transform:translateY(-4px)}
+.case-card-img{height:160px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.case-card-img .case-num{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gold);padding:4px 10px;letter-spacing:.1em;border:1px solid rgba(200,146,42,.3)}
+.case-card-img .lock-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.8);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.case-card-body{padding:20px}
+.case-card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--bright);font-weight:700;margin-bottom:8px}
+.case-card-desc{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.case-meta{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.tag-pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;letter-spacing:.05em}
+.btn-solve{width:100%;background:transparent;border:1px solid rgba(200,146,42,.4);color:var(--gold);padding:11px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer;border-radius:2px;transition:all .2s}
+.btn-solve:hover{background:var(--gold);color:#0b0c10}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:4px;max-width:440px;width:100%;padding:36px;position:relative}
+.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--bright)}
+.modal-tag{display:inline-block;background:var(--gold);color:#0b0c10;font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:.12em;margin-bottom:16px}
+.modal-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--bright);margin-bottom:12px;line-height:1.25}
+.modal-desc{font-size:16px;color:var(--muted);line-height:1.65;margin-bottom:24px}
+.modal-price{font-family:'Playfair Display',serif;font-size:38px;color:var(--gold);margin-bottom:6px}
+.modal-price-note{font-size:14px;color:var(--muted);margin-bottom:28px}
+.modal-btn{width:100%;background:var(--gold);color:#0b0c10;border:none;padding:14px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;border-radius:2px;transition:background .2s;margin-bottom:10px}
+.modal-btn:hover{background:var(--gold2)}
+.modal-cancel{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);padding:12px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.08em;cursor:pointer;border-radius:2px;transition:all .2s}
+.modal-cancel:hover{color:var(--text);border-color:var(--text)}
+
+/* HOW IT WORKS */
+.stages-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;position:relative}
+.stage-step{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:18px 14px;text-align:center;transition:border-color .2s}
+.stage-step:hover{border-color:rgba(200,146,42,.4)}
+.stage-icon{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--gold)}
+.stage-step.active-stage .stage-icon{background:var(--gold);color:#0b0c10;border-color:var(--gold)}
+.stage-num{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;margin-bottom:6px}
+.stage-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--bright);font-weight:700;margin-bottom:8px;line-height:1.3}
+.stage-desc{font-size:14px;color:var(--muted);line-height:1.55}
+
+/* SCORING */
+.scoring-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.notepad{background:#15140a;border:1px solid #3a3820;border-radius:4px;overflow:hidden}
+.notepad-hdr{background:var(--gold);padding:12px 22px}
+.notepad-hdr span{font-family:'Share Tech Mono',monospace;font-size:12px;color:#0b0c10;letter-spacing:.12em;font-weight:bold}
+.notepad-body{padding:4px 22px 18px}
+.np-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(200,146,42,.12);font-size:16px}
+.np-row:last-child{border-bottom:none}
+.np-pts{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--gold)}
+.np-pts.g{color:var(--green)}
+.score-cards{display:flex;flex-direction:column;gap:18px}
+.score-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:4px;padding:20px 22px}
+.score-card-t{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em;margin-bottom:8px}
+.score-card-d{font-size:15px;color:var(--muted);line-height:1.65}
+
+/* CTA */
+.cta-sec{padding:90px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(200,146,42,.06) 0%,transparent 70%);pointer-events:none}
+.cta-title{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--bright);margin-bottom:14px;line-height:1.1;position:relative}
+.cta-sub{font-size:18px;color:var(--muted);margin-bottom:40px;position:relative}
+.cta-acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* FOOTER */
+footer{padding:22px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.foot-logo{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold)}
+.foot-copy{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.08em}
+
+/* CASE IMG COLORS */
+.c1{background:linear-gradient(135deg,#120a0a,#2a1010)}
+.c2{background:linear-gradient(135deg,#0a0d12,#10182a)}
+.c3{background:linear-gradient(135deg,#0a120a,#102a14)}
+.c4{background:linear-gradient(135deg,#120a12,#2a102a)}
+.c5{background:linear-gradient(135deg,#12100a,#2a280a)}
+.c6{background:linear-gradient(135deg,#0a0c12,#14162a)}
+.case-img-label{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.35);letter-spacing:.12em;text-align:center;padding:0 12px}
+
+/* AI CREATOR SECTION */
+.ai-sec{padding:80px 48px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.ai-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 30% 50%,rgba(200,146,42,.05) 0%,transparent 70%);pointer-events:none}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.ai-features{display:flex;flex-direction:column;gap:22px;margin-top:36px}
+.ai-feature{display:flex;gap:18px;align-items:flex-start}
+.ai-icon{width:42px;height:42px;border-radius:3px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;color:var(--gold)}
+.ai-feat-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--bright);font-weight:700;margin-bottom:5px}
+.ai-feat-desc{font-size:15px;color:var(--muted);line-height:1.65}
+.ai-terminal{background:#080a0d;border:1px solid var(--border);border-radius:4px;overflow:hidden;font-family:'Share Tech Mono',monospace}
+.ai-term-bar{background:#111318;padding:12px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.td{width:11px;height:11px;border-radius:50%}
+.td.r{background:#cc3333}.td.y{background:#c8922a}.td.g{background:#4caf80}
+.ai-term-title{font-size:12px;color:var(--muted);margin-left:auto;letter-spacing:.1em}
+.ai-term-body{padding:24px;font-size:13px;line-height:2.1}
+.tl{display:flex;gap:12px}
+.t-p{color:var(--gold)}.t-c{color:#7ab8e8}.t-o{color:#7ec87e;padding-left:22px}
+.t-cursor{display:inline-block;width:9px;height:15px;background:var(--gold);animation:blink 1s infinite;vertical-align:bottom}
+.ai-badge{display:inline-block;background:rgba(76,175,128,.1);border:1px solid rgba(76,175,128,.3);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:12px;padding:5px 14px;letter-spacing:.12em;border-radius:2px;margin-bottom:16px}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:60px 24px}
+  .hero-visual{display:none}
+  .cases-grid{grid-template-columns:1fr 1fr}
+  .stages-row{grid-template-columns:1fr 1fr}
+  .scoring-wrap{grid-template-columns:1fr}
+  .trial-banner{grid-template-columns:1fr}
+  .trial-case-card{width:100%}
+  nav{padding:14px 20px}
+  .nav-links{display:none}
+  .sec{padding:48px 24px}
+  .ai-sec{padding:56px 24px}
+  .ai-grid{grid-template-columns:1fr}
+  .cta-sec{padding:60px 24px}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="landingpage-claug.html" class="logo">Mystery<span>Wars</span></a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">HOW IT WORKS</a></li>
+    <li><a href="#cases">CASES</a></li>
+    <li><a href="#scoring">SCORING</a></li>
+    <li><a href="#create">CREATE</a></li>
+    <li><a href="trail-case-claude.html">TRIAL CASE</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="trail-case-claude.html" class="btn-trial">FREE TRIAL CASE</a>
+    <button class="btn-nav-cta">SIGN IN</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow"><span class="blink">●</span> LIVE INVESTIGATION ACTIVE</div>
+    <h1 class="hero-title">The <em>Truth</em><br>Rewards the<br>Sharpest Mind.</h1>
+    <p class="hero-desc">Investigate fictional crimes stage by stage. Decode clues, interrogate suspects, and submit your theory before the competition does.</p>
+    <div class="hero-actions">
+      <a href="trail-case-claude.html" class="btn-primary">PLAY FREE TRIAL CASE</a>
+      <a href="#cases" class="btn-outline">BROWSE ALL CASES</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="case-tag">CASE FILE #MW-001</div>
+    <div class="evidence-grid">
+      <div class="ev-box"><div class="pin"></div>CRIME SCENE</div>
+      <div class="ev-box"><div class="pin"></div>SUSPECT A</div>
+      <div class="ev-box">CCTV STILL</div>
+      <div class="ev-box">FINANCIAL LOG</div>
+    </div>
+    <div class="redline"></div>
+    <div class="suspects">
+      <div class="s-chip hot">▶ DR. VALE</div>
+      <div class="s-chip">MR. QUINN</div>
+      <div class="s-chip">LADY CROSS</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-n">12,400+</div><div class="stat-l">ACTIVE DETECTIVES</div></div>
+  <div class="stat"><div class="stat-n">340</div><div class="stat-l">CASES SOLVED</div></div>
+  <div class="stat"><div class="stat-n">5</div><div class="stat-l">STAGES PER CASE</div></div>
+  <div class="stat"><div class="stat-n">$5</div><div class="stat-l">PER PREMIUM CASE</div></div>
+</div>
+
+<!-- TRIAL + CASES -->
+<section class="sec" id="cases">
+  <div class="sec-label">// CASES</div>
+  <h2 class="sec-title">Pick Your Investigation</h2>
+  <p class="sec-sub">Start with a free trial to learn the ropes, then dive into premium cases — each a unique mystery waiting to be cracked.</p>
+
+  <!-- TRIAL BANNER -->
+  <div class="trial-banner">
+    <div class="trial-banner-inner">
+      <div class="tag">FREE — NO ACCOUNT NEEDED</div>
+      <div class="trial-banner-title">The Vanishing of Dr. Harrow</div>
+      <div class="trial-banner-desc">A respected physician disappears from his locked study. Three suspects. Five stages. Zero cost. The perfect introduction to Mystery Wars.</div>
+      <a href="trial.html" class="btn-primary" style="margin-top:18px;display:inline-block">PLAY TRIAL CASE →</a>
+    </div>
+    <div class="trial-case-card">
+      <div class="trial-card-img c1">
+        <div class="stamp">TRIAL CASE</div>
+      </div>
+      <div class="trial-card-body">
+        <div class="trial-card-name">The Vanishing of Dr. Harrow</div>
+        <div class="trial-card-desc">All 5 stages unlocked. No payment required. Perfect for first-time detectives.</div>
+        <a href="trial.html" class="btn-solve-trial">SOLVE THE CASE — FREE</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE GRID -->
+  <div class="cases-grid">
+
+    <div class="case-card" onclick="openModal('The Bellhaven Poisoning','A socialite is found dead at her own birthday gala. The champagne was poisoned — but by whom? Every guest had motive, and every alibi has a crack.','Moderate','Poison · Society · Alibi')">
+      <div class="case-card-img c2">
+        <div class="case-num">CASE #002</div>
+        <div class="lock-badge">🔒</div>
+        <div class="case-img-label">BELLHAVEN MANOR</div>
+      </div>
+      <div class="case-card-body">
+        <div class="case-card-name">The Bellhaven Poisoning</div>
+        <div class="case-card-desc">A socialite dies at her own gala. The champagne was poisoned. Every guest had motive.</div>
+        <div class="case-meta">
+          <span class="tag-pill">MODERATE</span>
+          <span class="tag-pill">POISON</span>
+          <span class="tag-pill">ALIBI</span>
+        </div>
+        <button class="btn-solve">SOLVE THE CASE — $5</button>
+      </div>
+    </div>
+
+    <div class="case-card" onclick="openModal('Blood on the Rails','A conductor is found dead mid-route on the Orient Express line. The train never stopped. Twelve passengers. One killer. No escape.','Hard','Locked Room · Train · Deduction')">
+      <div class="case-card-img c3">
+        <div class="case-num">CASE #003</div>
+        <div class="lock-badge">🔒</div>
+        <div class="case-img-label">ORIENT ROUTE 7</div>
+      </div>
+      <div class="case-card-body">
+        <div class="case-card-name">Blood on the Rails</div>
+        <div class="case-card-desc">A conductor murdered mid-route. The train never stopped. One of twelve passengers is the killer.</div>
+        <div class="case-meta">
+          <span class="tag-pill">HARD</span>
+          <span class="tag-pill">LOCKED ROOM</span>
+          <span class="tag-pill">TRAIN</span>
+        </div>
+        <button class="btn-solve">SOLVE THE CASE — $5</button>
+      </div>
+    </div>
+
+    <div class="case-card" onclick="openModal('The Ashford Inheritance','A billionaire\\'s will is changed 24 hours before his death. Three heirs, one forged signature, and a housekeeper who saw too much.','Easy','Fraud · Inheritance · Documents')">
+      <div class="case-card-img c4">
+        <div class="case-num">CASE #004</div>
+        <div class="lock-badge">🔒</div>
+        <div class="case-img-label">ASHFORD ESTATE</div>
+      </div>
+      <div class="case-card-body">
+        <div class="case-card-name">The Ashford Inheritance</div>
+        <div class="case-card-desc">A will forged 24 hours before death. Three heirs. A housekeeper who saw too much.</div>
+        <div class="case-meta">
+          <span class="tag-pill">EASY</span>
+          <span class="tag-pill">FRAUD</span>
+          <span class="tag-pill">DOCUMENTS</span>
+        </div>
+        <button class="btn-solve">SOLVE THE CASE — $5</button>
+      </div>
+    </div>
+
+    <div class="case-card" onclick="openModal('The Silent Gallery','An art curator is strangled in a locked gallery at midnight. The CCTV was wiped. Only the paintings were watching.','Hard','Art · Locked Room · Surveillance')">
+      <div class="case-card-img c5">
+        <div class="case-num">CASE #005</div>
+        <div class="lock-badge">🔒</div>
+        <div class="case-img-label">MERIDIAN GALLERY</div>
+      </div>
+      <div class="case-card-body">
+        <div class="case-card-name">The Silent Gallery</div>
+        <div class="case-card-desc">An art curator strangled at midnight. CCTV wiped. Only the paintings were watching.</div>
+        <div class="case-meta">
+          <span class="tag-pill">HARD</span>
+          <span class="tag-pill">ART</span>
+          <span class="tag-pill">SURVEILLANCE</span>
+        </div>
+        <button class="btn-solve">SOLVE THE CASE — $5</button>
+      </div>
+    </div>
+
+    <div class="case-card" onclick="openModal('Last Message Sent','A tech CEO dies hours after sending a cryptic final email. Corporate espionage or a jealous colleague? The inbox holds all the clues.','Moderate','Corporate · Digital · Espionage')">
+      <div class="case-card-img c6">
+        <div class="case-num">CASE #006</div>
+        <div class="lock-badge">🔒</div>
+        <div class="case-img-label">VERTEX TOWER</div>
+      </div>
+      <div class="case-card-body">
+        <div class="case-card-name">Last Message Sent</div>
+        <div class="case-card-desc">A tech CEO dies after a cryptic final email. Corporate espionage or an inside job?</div>
+        <div class="case-meta">
+          <span class="tag-pill">MODERATE</span>
+          <span class="tag-pill">CORPORATE</span>
+          <span class="tag-pill">DIGITAL</span>
+        </div>
+        <button class="btn-solve">SOLVE THE CASE — $5</button>
+      </div>
+    </div>
+
+    <div class="case-card" onclick="openModal('The Lighthouse Keeper\\'s Secret','A lighthouse keeper drowns in calm waters a mile from shore. His logbook is missing. The village has been keeping a secret for thirty years.','Moderate','Maritime · Cold Case · Village')">
+      <div class="case-card-img c1">
+        <div class="case-num">CASE #007</div>
+        <div class="lock-badge">🔒</div>
+        <div class="case-img-label">CAPE VORN LIGHTHOUSE</div>
+      </div>
+      <div class="case-card-body">
+        <div class="case-card-name">The Lighthouse Keeper's Secret</div>
+        <div class="case-card-desc">Drowns in calm water. Missing logbook. A village secret thirty years in the making.</div>
+        <div class="case-meta">
+          <span class="tag-pill">MODERATE</span>
+          <span class="tag-pill">MARITIME</span>
+          <span class="tag-pill">COLD CASE</span>
+        </div>
+        <button class="btn-solve">SOLVE THE CASE — $5</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec" id="how-it-works">
+  <div class="sec-label">// HOW IT WORKS</div>
+  <h2 class="sec-title">Five Stages. One Killer.</h2>
+  <p class="sec-sub">Each case unfolds across five stages. New evidence, new contradictions, and one explosive twist — before you submit your final theory.</p>
+  <div class="stages-row">
+    <div class="stage-step">
+      <div class="stage-icon">1</div>
+      <div class="stage-num">STAGE 01</div>
+      <div class="stage-name">Crime Discovered</div>
+      <div class="stage-desc">Case file opens — crime description, suspects, and first evidence.</div>
+    </div>
+    <div class="stage-step">
+      <div class="stage-icon">2</div>
+      <div class="stage-num">STAGE 02</div>
+      <div class="stage-name">New Evidence</div>
+      <div class="stage-desc">Phone records, CCTV, financial logs, and witness statements surface.</div>
+    </div>
+    <div class="stage-step active-stage">
+      <div class="stage-icon">3</div>
+      <div class="stage-num">STAGE 03</div>
+      <div class="stage-name">Interrogations</div>
+      <div class="stage-desc">Suspect interviews reveal contradictions and hidden motives.</div>
+    </div>
+    <div class="stage-step">
+      <div class="stage-icon">4</div>
+      <div class="stage-num">STAGE 04</div>
+      <div class="stage-name">Major Twist</div>
+      <div class="stage-desc">An unexpected revelation reshapes everything you thought you knew.</div>
+    </div>
+    <div class="stage-step">
+      <div class="stage-icon">5</div>
+      <div class="stage-num">STAGE 05</div>
+      <div class="stage-name">Final Theory</div>
+      <div class="stage-desc">Submit your culprit, method, motive, and evidence. Your score awaits.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SCORING -->
+<section class="sec" id="scoring">
+  <div class="sec-label">// SCORING SYSTEM</div>
+  <h2 class="sec-title">Reward the Sharpest Deduction.</h2>
+  <p class="sec-sub">Points are earned for accuracy and quality of reasoning. Pick the right culprit, method, motive — and back it up with the best evidence.</p>
+  <div class="scoring-wrap">
+    <div class="notepad">
+      <div class="notepad-hdr"><span>DETECTIVE SCORECARD</span></div>
+      <div class="notepad-body">
+        <div class="np-row"><span>Correct culprit identified</span><span class="np-pts">100 PTS</span></div>
+        <div class="np-row"><span>Correct method deduced</span><span class="np-pts">50 PTS</span></div>
+        <div class="np-row"><span>Correct motive established</span><span class="np-pts">25 PTS</span></div>
+        <div class="np-row"><span>Best supporting evidence selected</span><span class="np-pts">15 PTS</span></div>
+        <div class="np-row"><span>Key interrogation identified</span><span class="np-pts">10 PTS</span></div>
+        <div class="np-row"><span>Early correct theory bonus</span><span class="np-pts g">+ BONUS</span></div>
+        <div class="np-row"><span>Top community theory voted</span><span class="np-pts g">+ BONUS</span></div>
+      </div>
+    </div>
+    <div class="score-cards">
+      <div class="score-card">
+        <div class="score-card-t">EVIDENCE QUALITY</div>
+        <div class="score-card-d">Picking the most decisive evidence earns you more points. Selecting phone records when CCTV was clearer? That costs you precision marks.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-card-t">INTERROGATION INSIGHT</div>
+        <div class="score-card-d">Which question broke the suspect? Identifying the right contradiction in the interrogation adds to your total score.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-card-t">SPEED BONUS</div>
+        <div class="score-card-d">Submit a correct theory before most players and earn a speed multiplier. Early detectives win the most.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI CREATOR -->
+<section class="ai-sec" id="create">
+  <div class="ai-grid">
+    <div>
+      <div class="ai-badge">NEW — AI POWERED</div>
+      <div class="sec-label" style="margin-bottom:12px">// CREATE YOUR OWN MYSTERY</div>
+      <h2 class="sec-title" style="margin-bottom:16px">Build a Case.<br>Stump the World.</h2>
+      <p style="font-size:18px;color:var(--muted);line-height:1.75;max-width:460px;margin-bottom:0">Have a mystery idea? Our AI tools help you craft airtight cases — complete with suspects, evidence, interrogations, and perfectly-timed twists. Publish it and let the community try to crack it.</p>
+      <div class="ai-features">
+        <div class="ai-feature">
+          <div class="ai-icon">◈</div>
+          <div>
+            <div class="ai-feat-title">Suspect & Motive Generator</div>
+            <div class="ai-feat-desc">AI builds complex characters with backstories, secrets, and believable motives — ready to be interrogated.</div>
+          </div>
+        </div>
+        <div class="ai-feature">
+          <div class="ai-icon">◉</div>
+          <div>
+            <div class="ai-feat-title">Evidence Scheduler</div>
+            <div class="ai-feat-desc">Arrange your clues across all 5 stages. Control exactly what detectives see — and when they see it.</div>
+          </div>
+        </div>
+        <div class="ai-feature">
+          <div class="ai-icon">◎</div>
+          <div>
+            <div class="ai-feat-title">Twist Engine</div>
+            <div class="ai-feat-desc">Generate an unexpected Stage 4 revelation that reframes earlier clues without breaking the logic of your case.</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" style="margin-top:36px">START CREATING — COMING SOON</button>
+    </div>
+    <div class="ai-terminal">
+      <div class="ai-term-bar">
+        <div class="td r"></div><div class="td y"></div><div class="td g"></div>
+        <span class="ai-term-title">mystery-creator v2.1</span>
+      </div>
+      <div class="ai-term-body">
+        <div class="tl"><span class="t-p">›</span><span class="t-c">generate suspect --motive jealousy</span></div>
+        <div class="tl"><span class="t-o">✓ Character: Elena Frost, financial advisor</span></div>
+        <div class="tl"><span class="t-o">✓ Backstory with 3 hidden secrets</span></div>
+        <div class="tl" style="margin-top:6px"><span class="t-p">›</span><span class="t-c">add evidence --type cctv --stage 2</span></div>
+        <div class="tl"><span class="t-o">✓ CCTV footage added to Stage 2</span></div>
+        <div class="tl"><span class="t-o">✓ Timestamp set: Nov 2, 23:17</span></div>
+        <div class="tl" style="margin-top:6px"><span class="t-p">›</span><span class="t-c">add twist --day 4 --type alibi-break</span></div>
+        <div class="tl"><span class="t-o">✓ Twist scheduled for Stage 4</span></div>
+        <div class="tl"><span class="t-o">✓ Evidence chain updated</span></div>
+        <div class="tl" style="margin-top:6px"><span class="t-p">›</span><span class="t-c">publish --schedule 5-stage<span class="t-cursor"></span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <h2 class="cta-title">Your First Case<br>Is Waiting.</h2>
+  <p class="cta-sub">No account needed. No payment required. Just your instincts and the truth.</p>
+  <div class="cta-acts">
+    <a href="trial.html" class="btn-primary">PLAY FREE TRIAL CASE →</a>
+    <a href="#cases" class="btn-outline">BROWSE PREMIUM CASES</a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">MysteryWars</div>
+  <div class="foot-copy">© 2026 MYSTERYWARS · ALL CASES ARE FICTIONAL</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tag">PREMIUM CASE</div>
+    <h3 class="modal-title" id="modal-title"></h3>
+    <p class="modal-desc" id="modal-desc"></p>
+    <div class="modal-price">$5</div>
+    <div class="modal-price-note">One-time unlock · All 5 stages included · Instant access</div>
+    <button class="modal-btn">UNLOCK & SOLVE THIS CASE</button>
+    <button class="modal-cancel" onclick="closeModal()">CANCEL — BACK TO CASES</button>
+  </div>
+</div>
+
+<script>
+function openModal(title, desc, diff, tags) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-desc').textContent = desc;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
+
+
+trial case:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trial Case – The Vanishing of Dr. Harrow | Mystery Wars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0c10;--surface:#111318;--card:#161820;--border:#252730;
+  --gold:#c8922a;--gold2:#e8b04a;--red:#cc3333;--muted:#5e6175;
+  --text:#ccc8bc;--bright:#f0ece0;--green:#4caf80;--blue:#4a90d9;
+}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(11,12,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:14px 48px;backdrop-filter:blur(8px)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--gold);text-decoration:none}
+.logo span{color:var(--bright)}
+.nav-back{color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.1em;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--gold)}
+.trial-badge{background:rgba(76,175,128,.12);border:1px solid rgba(76,175,128,.3);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 12px;letter-spacing:.12em;border-radius:2px}
+
+/* HERO */
+.case-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.case-hero-img{height:320px;background:linear-gradient(135deg,#120a06,#1e120a,#120a0a);display:flex;align-items:center;justify-content:center;position:relative}
+.case-hero-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg) 100%)}
+.case-hero-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+.case-hero-doc{background:rgba(22,24,32,.9);border:1px solid var(--border);padding:24px 32px;text-align:center;max-width:340px}
+.doc-stamp{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green);letter-spacing:.2em;margin-bottom:8px;display:flex;align-items:center;gap:8px;justify-content:center}
+.doc-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--bright);font-weight:700;line-height:1.2}
+.case-hero-body{padding:40px 48px 0;position:relative;z-index:2}
+.case-meta-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px}
+.meta-pill{background:var(--surface);border:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);padding:4px 12px;border-radius:20px;letter-spacing:.08em}
+.meta-pill.free{border-color:rgba(76,175,128,.4);color:var(--green)}
+.case-title-main{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:var(--bright);margin-bottom:14px;line-height:1.1}
+.case-desc-full{font-size:18px;line-height:1.8;color:var(--text);max-width:700px;margin-bottom:32px}
+
+/* STAGE NAV */
+.stage-nav{display:flex;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow-x:auto}
+.stage-btn{flex:1;min-width:140px;padding:16px 12px;text-align:center;cursor:pointer;border:none;background:transparent;border-right:1px solid var(--border);transition:background .2s;position:relative}
+.stage-btn:last-child{border-right:none}
+.stage-btn.active{background:rgba(200,146,42,.08)}
+.stage-btn.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold)}
+.stage-btn.locked{cursor:not-allowed}
+.sb-num{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.14em;margin-bottom:4px}
+.sb-name{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text);letter-spacing:.08em}
+.stage-btn.active .sb-name{color:var(--gold)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--border);margin:6px auto 0}
+.stage-btn.active .sb-dot{background:var(--gold)}
+.stage-btn.done .sb-dot{background:var(--green)}
+
+/* MAIN LAYOUT */
+.case-main{padding:0 48px 80px;max-width:960px;margin:0 auto}
+
+/* STAGE PANELS */
+.stage-panel{display:none;padding-top:40px}
+.stage-panel.visible{display:block}
+.stage-header{margin-bottom:28px}
+.stage-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.2em;margin-bottom:8px}
+.stage-title{font-family:'Playfair Display',serif;font-size:30px;color:var(--bright);font-weight:700;margin-bottom:10px}
+.stage-intro{font-size:17px;color:var(--muted);line-height:1.7;max-width:640px}
+
+/* ─── STAGE 1: CASE FILE ─── */
+.case-file-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.case-file-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:20px;position:relative}
+.cf-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.16em;margin-bottom:10px}
+.cf-text{font-size:15px;line-height:1.7;color:var(--text)}
+.cf-text strong{color:var(--bright);font-weight:600}
+.suspect-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.suspect-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:16px;transition:border-color .2s}
+.suspect-card:hover{border-color:rgba(200,146,42,.4)}
+.sc-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:12px}
+.sc-avatar.a{background:rgba(200,146,42,.15);color:var(--gold);border:1px solid rgba(200,146,42,.3)}
+.sc-avatar.b{background:rgba(76,74,183,.15);color:#9090f0;border:1px solid rgba(76,74,183,.3)}
+.sc-avatar.c{background:rgba(204,51,51,.15);color:#e07070;border:1px solid rgba(204,51,51,.3)}
+.sc-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--bright);font-weight:700;margin-bottom:3px}
+.sc-role{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-bottom:8px}
+.sc-bio{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* ─── STAGE 2: EVIDENCE TABS ─── */
+.evidence-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:20px;flex-wrap:wrap}
+.ev-tab{padding:11px 20px;cursor:pointer;border:none;background:var(--surface);border-right:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;transition:all .2s;display:flex;align-items:center;gap:7px}
+.ev-tab:last-child{border-right:none}
+.ev-tab.active{background:rgba(200,146,42,.1);color:var(--gold)}
+.ev-tab .dot{width:6px;height:6px;border-radius:50%;background:var(--border)}
+.ev-tab.active .dot{background:var(--gold)}
+.ev-content{display:none}
+.ev-content.visible{display:block}
+.ev-panel{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:24px}
+.ev-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.16em;margin-bottom:14px}
+.ev-body{font-size:15px;line-height:1.75;color:var(--text)}
+.ev-body p{margin-bottom:10px}
+.ev-body .highlight{background:rgba(200,146,42,.1);border-left:2px solid var(--gold);padding:10px 14px;margin:12px 0;font-style:italic;color:var(--bright)}
+.ev-body .rec-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.ev-body .rec-row:last-child{border-bottom:none}
+.ev-body .rec-label{color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px}
+.ev-body .rec-val{color:var(--text)}
+.ev-body .rec-val.sus{color:#e07070}
+.cctv-frame{background:#000;border:1px solid #333;border-radius:2px;padding:12px;font-family:'Share Tech Mono',monospace;margin-bottom:10px}
+.cctv-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:10px;color:#555;letter-spacing:.1em}
+.cctv-rec{color:var(--red);display:flex;align-items:center;gap:5px}
+.cctv-rec::before{content:'●';animation:blink 1s infinite;font-size:8px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.cctv-screen{background:#0a0a0a;height:160px;border:1px solid #222;display:flex;align-items:center;justify-content:center;font-size:12px;color:#333;letter-spacing:.1em;position:relative;overflow:hidden}
+.cctv-screen::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,.01) 3px,rgba(255,255,255,.01) 4px)}
+.cctv-timestamp{font-size:11px;color:#446;margin-top:6px}
+
+/* ─── STAGE 3: INTERROGATIONS ─── */
+.interrog-tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.it-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:2px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.08em;transition:all .2s}
+.it-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(200,146,42,.08)}
+.interrog-panel{display:none}
+.interrog-panel.visible{display:block}
+.interrog-header{display:flex;gap:16px;align-items:center;margin-bottom:20px;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:16px 20px}
+.ih-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;flex-shrink:0}
+.ih-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--bright);font-weight:700}
+.ih-role{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:3px}
+.qa-list{display:flex;flex-direction:column;gap:10px}
+.qa-item{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer}
+.qa-item.open .qa-answer{display:block}
+.qa-item.open .qa-arrow{transform:rotate(180deg)}
+.qa-q{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;gap:12px}
+.qa-q-text{font-size:15px;color:var(--bright);line-height:1.4;flex:1}
+.qa-q-prefix{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.12em;margin-bottom:3px}
+.qa-arrow{color:var(--muted);font-size:12px;transition:transform .2s;flex-shrink:0}
+.qa-answer{display:none;padding:14px 18px;border-top:1px solid var(--border);background:rgba(255,255,255,.02)}
+.qa-answer-text{font-size:15px;line-height:1.75;color:var(--text);font-style:italic}
+.qa-answer-text .flag{display:inline-block;background:rgba(204,51,51,.12);border:1px solid rgba(204,51,51,.3);color:#e07070;font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 7px;letter-spacing:.1em;border-radius:2px;margin-left:8px;vertical-align:middle;font-style:normal}
+.qa-answer-text .ok{display:inline-block;background:rgba(76,175,128,.1);border:1px solid rgba(76,175,128,.3);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 7px;letter-spacing:.1em;border-radius:2px;margin-left:8px;vertical-align:middle;font-style:normal}
+
+/* ─── STAGE 4: TWIST ─── */
+.twist-box{background:linear-gradient(135deg,rgba(204,51,51,.08),rgba(200,146,42,.06));border:1px solid rgba(200,146,42,.3);border-radius:4px;padding:36px;text-align:center;margin-bottom:28px}
+.twist-icon{font-size:36px;margin-bottom:16px}
+.twist-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);font-weight:700;margin-bottom:14px}
+.twist-text{font-size:17px;line-height:1.8;color:var(--text);max-width:600px;margin:0 auto 20px}
+.twist-reveal{background:var(--card);border:1px solid rgba(204,51,51,.3);border-left:3px solid var(--red);border-radius:4px;padding:20px 24px;text-align:left;margin-top:20px}
+.twist-reveal-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--red);letter-spacing:.16em;margin-bottom:10px}
+.twist-reveal-text{font-size:16px;line-height:1.75;color:var(--bright)}
+.twist-implications{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.ti-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:16px}
+.ti-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.12em;margin-bottom:8px}
+.ti-text{font-size:14px;color:var(--text);line-height:1.6}
+
+/* ─── STAGE 5: FINAL THEORY ─── */
+.theory-form{display:flex;flex-direction:column;gap:28px}
+.tf-block{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:24px}
+.tf-num{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.18em;margin-bottom:6px}
+.tf-question{font-family:'Playfair Display',serif;font-size:18px;color:var(--bright);font-weight:700;margin-bottom:6px;line-height:1.3}
+.tf-hint{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.tf-options{display:flex;flex-direction:column;gap:8px}
+.tf-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:3px;cursor:pointer;transition:all .2s;background:var(--surface)}
+.tf-opt:hover{border-color:rgba(200,146,42,.4)}
+.tf-opt.selected{border-color:var(--gold);background:rgba(200,146,42,.07)}
+.tf-opt input{display:none}
+.tf-radio{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;margin-top:2px;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.tf-opt.selected .tf-radio{border-color:var(--gold);background:var(--gold)}
+.tf-opt.selected .tf-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#0b0c10}
+.tf-opt-text{font-size:15px;color:var(--text);line-height:1.5}
+.tf-opt.selected .tf-opt-text{color:var(--bright)}
+.submit-theory{width:100%;background:var(--gold);color:#0b0c10;border:none;padding:16px;font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:.12em;cursor:pointer;border-radius:3px;transition:background .2s;margin-top:8px}
+.submit-theory:hover{background:var(--gold2)}
+.submit-theory:disabled{opacity:.5;cursor:not-allowed}
+
+/* SCORE REVEAL */
+.score-reveal{display:none;background:var(--card);border:1px solid rgba(200,146,42,.3);border-radius:4px;padding:36px;text-align:center;margin-top:20px}
+.score-reveal.show{display:block}
+.sr-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.18em;margin-bottom:10px}
+.sr-score{font-family:'Playfair Display',serif;font-size:72px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:4px}
+.sr-max{font-size:14px;color:var(--muted);margin-bottom:24px;font-family:'Share Tech Mono',monospace;letter-spacing:.08em}
+.sr-breakdown{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;text-align:left}
+.sr-row{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.sr-row-label{font-size:14px;color:var(--muted)}
+.sr-row-pts{font-family:'Share Tech Mono',monospace;font-size:13px}
+.sr-row-pts.correct{color:var(--green)}
+.sr-row-pts.wrong{color:var(--red)}
+.answer-reveal{background:var(--surface);border:1px solid rgba(204,51,51,.3);border-left:3px solid var(--red);border-radius:3px;padding:18px 20px;text-align:left;margin-top:20px}
+.ar-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--red);letter-spacing:.16em;margin-bottom:10px}
+.ar-text{font-size:15px;line-height:1.75;color:var(--text)}
+.ar-text strong{color:var(--bright)}
+
+/* LOCKED STAGE */
+.locked-panel{background:var(--card);border:1px solid rgba(200,146,42,.25);border-radius:4px;padding:48px;text-align:center}
+.locked-icon{font-size:32px;margin-bottom:16px}
+.locked-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--bright);font-weight:700;margin-bottom:10px}
+.locked-desc{font-size:16px;color:var(--muted);line-height:1.65;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto}
+.locked-price{font-family:'Playfair Display',serif;font-size:40px;color:var(--gold);margin-bottom:4px}
+.locked-note{font-size:13px;color:var(--muted);margin-bottom:28px;font-family:'Share Tech Mono',monospace;letter-spacing:.06em}
+.btn-unlock{background:var(--gold);color:#0b0c10;border:none;padding:14px 40px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;border-radius:2px;transition:background .2s}
+.btn-unlock:hover{background:var(--gold2)}
+
+/* PROGRESS */
+.progress-bar-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 48px;display:flex;align-items:center;gap:16px}
+.pb-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;white-space:nowrap}
+.pb-track{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.pb-fill{height:100%;background:var(--gold);transition:width .4s ease;border-radius:2px}
+.pb-pct{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.08em;min-width:36px;text-align:right}
+
+/* NEXT STAGE BTN */
+.next-stage{margin-top:32px;display:flex;justify-content:flex-end}
+.btn-next{background:var(--gold);color:#0b0c10;border:none;padding:12px 28px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer;border-radius:2px;transition:background .2s;display:flex;align-items:center;gap:8px}
+.btn-next:hover{background:var(--gold2)}
+
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .case-hero-body{padding:28px 20px 0}
+  .case-main{padding:0 20px 60px}
+  .case-file-grid{grid-template-columns:1fr}
+  .suspect-cards{grid-template-columns:1fr 1fr}
+  .twist-implications{grid-template-columns:1fr}
+  .sr-breakdown{grid-template-columns:1fr}
+  .progress-bar-wrap{padding:10px 20px}
+  .case-title-main{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="landingpage-claug.html" class="logo">Mystery<span>Wars</span></a>
+  <a href="landingpage-claug.html" class="nav-back">← BACK TO CASES</a>
+  <div class="trial-badge">FREE TRIAL CASE</div>
+</nav>
+
+<!-- HERO -->
+<div class="case-hero">
+  <div class="case-hero-img">
+    <div class="case-hero-overlay">
+      <div class="case-hero-doc">
+        <div class="doc-stamp"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span> FREE — ALL STAGES UNLOCKED</div>
+        <div class="doc-title">CASE FILE #MW-001</div>
+      </div>
+    </div>
+  </div>
+  <div class="case-hero-body">
+    <div class="case-meta-row">
+      <span class="meta-pill free">FREE TRIAL</span>
+      <span class="meta-pill">DIFFICULTY: EASY</span>
+      <span class="meta-pill">5 STAGES</span>
+      <span class="meta-pill">3 SUSPECTS</span>
+    </div>
+    <h1 class="case-title-main">The Vanishing of Dr. Harrow</h1>
+    <p class="case-desc-full">Dr. Edmund Harrow — eminent physician, collector of rare poisons, and keeper of secrets — was found dead in his locked study on the morning of November 3rd. The door was bolted from the inside. The window was latched. And yet, someone got in. Three people had both the motive and the opportunity. Only you can unravel the truth before the case goes cold.</p>
+  </div>
+
+  <!-- STAGE NAV -->
+  <div class="stage-nav">
+    <button class="stage-btn active" onclick="goStage(1)" id="sbtn-1">
+      <div class="sb-num">STAGE 01</div>
+      <div class="sb-name">CRIME DISCOVERED</div>
+      <div class="sb-dot"></div>
+    </button>
+    <button class="stage-btn" onclick="goStage(2)" id="sbtn-2">
+      <div class="sb-num">STAGE 02</div>
+      <div class="sb-name">NEW EVIDENCE</div>
+      <div class="sb-dot"></div>
+    </button>
+    <button class="stage-btn" onclick="goStage(3)" id="sbtn-3">
+      <div class="sb-num">STAGE 03</div>
+      <div class="sb-name">INTERROGATIONS</div>
+      <div class="sb-dot"></div>
+    </button>
+    <button class="stage-btn" onclick="goStage(4)" id="sbtn-4">
+      <div class="sb-num">STAGE 04</div>
+      <div class="sb-name">MAJOR TWIST</div>
+      <div class="sb-dot"></div>
+    </button>
+    <button class="stage-btn" onclick="goStage(5)" id="sbtn-5">
+      <div class="sb-num">STAGE 05</div>
+      <div class="sb-name">FINAL THEORY</div>
+      <div class="sb-dot"></div>
+    </button>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar-wrap">
+  <span class="pb-label">INVESTIGATION PROGRESS</span>
+  <div class="pb-track"><div class="pb-fill" id="progress-fill" style="width:20%"></div></div>
+  <span class="pb-pct" id="progress-pct">20%</span>
+</div>
+
+<!-- MAIN -->
+<div class="case-main">
+
+  <!-- ══ STAGE 1 ══ -->
+  <div class="stage-panel visible" id="stage-1">
+    <div class="stage-header">
+      <div class="stage-label">// STAGE 01 — CRIME DISCOVERED</div>
+      <h2 class="stage-title">Initial Case File</h2>
+      <p class="stage-intro">You've been handed the initial case file. Study the crime scene, understand the circumstances, and take note of every suspect.</p>
+    </div>
+
+    <div class="case-file-grid">
+      <div class="case-file-card">
+        <div class="cf-label">CRIME REPORT</div>
+        <div class="cf-text">
+          <p>On the morning of <strong>November 3rd, 2024</strong>, housekeeper Mrs. Perkins discovered Dr. Edmund Harrow slumped in his study chair at <strong>7:42 AM</strong>. The door was bolted from the inside. A glass of port wine sat half-consumed on the desk.</p>
+          <br>
+          <p>Cause of death: <strong>Cardiac arrest</strong>. Toxicology report is pending — but the physician who examined the body noted the faint but distinct scent of <strong>digitalis</strong> on the victim's lips.</p>
+          <br>
+          <p>Dr. Harrow kept a private safe in the study. It was found <strong>open and empty</strong>.</p>
+        </div>
+      </div>
+      <div class="case-file-card">
+        <div class="cf-label">FIRST EVIDENCE</div>
+        <div class="cf-text">
+          <p>• Half-consumed glass of <strong>port wine</strong> on the desk — no second glass found.</p><br>
+          <p>• <strong>Letter opener</strong> on the floor, not the desk — unusual for the meticulous Dr. Harrow.</p><br>
+          <p>• Victim's <strong>personal journal</strong> open on the desk, final entry dated Nov 2nd: <em>"I can no longer trust anyone in this house."</em></p><br>
+          <p>• The study window latch was <strong>recently re-painted</strong> — who repainted it?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-header" style="margin-top:32px;margin-bottom:20px">
+      <div class="stage-label">// SUSPECTS</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--bright)">Three Persons of Interest</h3>
+    </div>
+
+    <div class="suspect-cards">
+      <div class="suspect-card">
+        <div class="sc-avatar a">MV</div>
+        <div class="sc-name">Margaret Vale</div>
+        <div class="sc-role">NIECE & SOLE HEIR</div>
+        <div class="sc-bio">Dr. Harrow's only living relative. Recently learned she was about to be removed from his will due to "erratic financial behaviour." Was visiting from London the night of his death.</div>
+      </div>
+      <div class="suspect-card">
+        <div class="sc-avatar b">TC</div>
+        <div class="sc-name">Thomas Culvert</div>
+        <div class="sc-role">BUSINESS PARTNER</div>
+        <div class="sc-bio">Harrow's long-time medical partner who handled the clinic's finances. An audit had revealed a significant discrepancy — £40,000 unaccounted for. Harrow had scheduled a meeting with his solicitor.</div>
+      </div>
+      <div class="suspect-card">
+        <div class="sc-avatar c">NP</div>
+        <div class="sc-name">Nora Perkins</div>
+        <div class="sc-role">HOUSEKEEPER (28 YRS)</div>
+        <div class="sc-bio">Devoted to the household for nearly three decades. Found the body. Has a key to every room. Recently overheard arguing with Dr. Harrow about "what she saw at the clinic." Visibly shaken during questioning.</div>
+      </div>
+    </div>
+
+    <div class="next-stage">
+      <button class="btn-next" onclick="goStage(2)">PROCEED TO EVIDENCE →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAGE 2 ══ -->
+  <div class="stage-panel" id="stage-2">
+    <div class="stage-header">
+      <div class="stage-label">// STAGE 02 — NEW EVIDENCE</div>
+      <h2 class="stage-title">Evidence Discovered</h2>
+      <p class="stage-intro">New evidence has surfaced. Examine each piece carefully — contradictions are hiding in plain sight.</p>
+    </div>
+
+    <div class="evidence-tabs">
+      <button class="ev-tab active" onclick="showEvidence('phone')"><div class="dot"></div> PHONE RECORDS</button>
+      <button class="ev-tab" onclick="showEvidence('cctv')"><div class="dot"></div> CCTV FOOTAGE</button>
+      <button class="ev-tab" onclick="showEvidence('financial')"><div class="dot"></div> FINANCIAL RECORDS</button>
+      <button class="ev-tab" onclick="showEvidence('witness')"><div class="dot"></div> WITNESS STATEMENT</button>
+    </div>
+
+    <div class="ev-content visible" id="ev-phone">
+      <div class="ev-panel">
+        <div class="ev-title">PHONE RECORDS — DR. HARROW'S MOBILE (NOV 1–3)</div>
+        <div class="ev-body">
+          <p>Records obtained from the network provider show the following calls in the 48 hours before death:</p>
+          <div class="rec-row"><span class="rec-label">NOV 1 · 09:14</span><span class="rec-val">Outgoing → Thomas Culvert · 4m 12s</span></div>
+          <div class="rec-row"><span class="rec-label">NOV 1 · 14:33</span><span class="rec-val">Incoming ← Harrow & Culvert Solicitor · 8m 04s</span></div>
+          <div class="rec-row"><span class="rec-label">NOV 2 · 11:07</span><span class="rec-val">Outgoing → Margaret Vale · 0m 18s <span style="color:var(--red);font-size:12px">(unanswered)</span></span></div>
+          <div class="rec-row"><span class="rec-label">NOV 2 · 22:51</span><span class="rec-val rec-sus">Incoming ← UNKNOWN NUMBER · 6m 43s</span></div>
+          <div class="rec-row"><span class="rec-label">NOV 3 · 00:03</span><span class="rec-val">Outgoing → Nora Perkins · 2m 11s</span></div>
+          <div class="highlight">Dr. Harrow called his housekeeper at midnight. What did they discuss? And who was the unknown caller just before?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ev-content" id="ev-cctv">
+      <div class="ev-panel">
+        <div class="ev-title">CCTV FOOTAGE — HARROW RESIDENCE</div>
+        <div class="ev-body">
+          <div class="cctv-frame">
+            <div class="cctv-header"><span>CAM 01 — FRONT ENTRANCE</span><span class="cctv-rec">REC</span></div>
+            <div class="cctv-screen">[ FOOTAGE: NOV 2, 21:44 — FIGURE ARRIVES ]<br><br><span style="color:#445;font-size:11px">Margaret Vale — confirmed by gait analysis</span></div>
+            <div class="cctv-timestamp">TIMESTAMP: 2024-11-02 21:44:07 · RES: 1080P · CAM: ENTRANCE</div>
+          </div>
+          <div class="cctv-frame" style="margin-top:12px">
+            <div class="cctv-header"><span>CAM 02 — GARDEN GATE</span><span class="cctv-rec">REC</span></div>
+            <div class="cctv-screen">[ FOOTAGE: NOV 2, 23:17 — SIDE GATE OPENS ]<br><br><span style="color:#554;font-size:11px">Unidentified figure. Male build. Overcoat.</span></div>
+            <div class="cctv-timestamp">TIMESTAMP: 2024-11-02 23:17:22 · RES: 720P · CAM: GARDEN</div>
+          </div>
+          <div class="highlight">The garden gate was accessed at 23:17 — AFTER Margaret's arrival but BEFORE the estimated time of death. This entrance bypasses the front door entirely and leads directly to the study window.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ev-content" id="ev-financial">
+      <div class="ev-panel">
+        <div class="ev-title">FINANCIAL RECORDS — HARROW & CULVERT MEDICAL CLINIC</div>
+        <div class="ev-body">
+          <p>Forensic accountants reviewed the clinic's books following an anonymous tip. Key findings:</p>
+          <div class="rec-row"><span class="rec-label">DISCREPANCY</span><span class="rec-val rec-sus">£40,200 unaccounted — 14 months</span></div>
+          <div class="rec-row"><span class="rec-label">PATTERN</span><span class="rec-val">Transfers to shell company "Culvert Holdings Ltd"</span></div>
+          <div class="rec-row"><span class="rec-label">AUTHORISATION</span><span class="rec-val rec-sus">Forged Dr. Harrow signature on 9 transactions</span></div>
+          <div class="rec-row"><span class="rec-label">SOLICITOR APPT</span><span class="rec-val">Booked Nov 4 to dissolve partnership</span></div>
+          <div class="rec-row"><span class="rec-label">HARROW WILL</span><span class="rec-val">Margaret Vale listed as sole beneficiary — unchanged</span></div>
+          <div class="highlight">Culvert was about to be exposed. The partnership dissolution meeting was booked for the day after Harrow's death. Motive: undeniable. But how would he access the locked study?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ev-content" id="ev-witness">
+      <div class="ev-panel">
+        <div class="ev-title">WITNESS STATEMENT — MRS. NORA PERKINS (HOUSEKEEPER)</div>
+        <div class="ev-body">
+          <p style="font-style:italic;color:var(--muted);margin-bottom:14px">Recorded statement, November 4th, 10:22 AM. Detective Inspector Rowan, CID.</p>
+          <p>"I heard raised voices from the study around half ten in the evening. I didn't think to knock — the doctor often had late meetings. At midnight he rang me on my mobile and said I was not to let anyone in the house 'under any circumstances.' I asked him what he meant. He said 'You already know, Nora.' Then he rang off."</p>
+          <br>
+          <p>"I went to bed at midnight as usual. When I came to bring his morning tea — he was gone. Just like that. Slumped in his chair. The safe was open. He never left that safe open."</p>
+          <br>
+          <p style="color:var(--red);font-size:14px;font-style:italic">Note: Mrs. Perkins had recently repainted the study window frame — her own admission. She claimed it was "routine maintenance." She became visibly distressed when asked about the window latch.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-stage">
+      <button class="btn-next" onclick="goStage(3)">PROCEED TO INTERROGATIONS →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAGE 3 ══ -->
+  <div class="stage-panel" id="stage-3">
+    <div class="stage-header">
+      <div class="stage-label">// STAGE 03 — INTERROGATIONS</div>
+      <h2 class="stage-title">Suspect Questioning</h2>
+      <p class="stage-intro">All three suspects have been brought in for questioning. Read their answers carefully — someone is lying.</p>
+    </div>
+
+    <div class="interrog-tabs">
+      <button class="it-btn active" onclick="showInterrog('margaret')">MARGARET VALE</button>
+      <button class="it-btn" onclick="showInterrog('culvert')">THOMAS CULVERT</button>
+      <button class="it-btn" onclick="showInterrog('nora')">NORA PERKINS</button>
+    </div>
+
+    <!-- Margaret -->
+    <div class="interrog-panel visible" id="interrog-margaret">
+      <div class="interrog-header">
+        <div class="ih-avatar sc-avatar a" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;background:rgba(200,146,42,.15);color:var(--gold);border:1px solid rgba(200,146,42,.3)">MV</div>
+        <div><div class="ih-name">Margaret Vale</div><div class="ih-role">NIECE · SOLE HEIR · INTERVIEWED NOV 4TH</div></div>
+      </div>
+      <div class="qa-list">
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q01</div><div class="qa-q-text">When did you arrive at the house on November 2nd?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"Around half nine in the evening. I took the 8:15 from Paddington. I can show you my ticket."</div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q02</div><div class="qa-q-text">Did you speak to your uncle that evening?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"Briefly. He seemed distracted. We had a glass of wine together in the sitting room around ten o'clock, then he excused himself. Said he had paperwork." <span class="flag">NOTE: CCTV shows her arrival at 21:44 — consistent</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q03</div><div class="qa-q-text">Were you aware that you were about to be removed from the will?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"Absolutely not. That is a vicious lie. My uncle and I had our differences about money, yes, but he would never..." <span class="flag">CONTRADICTED BY SOLICITOR RECORDS</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q04</div><div class="qa-q-text">What time did you go to bed that night?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I went up to my room at around eleven. I read for a while and fell asleep." <span class="ok">UNVERIFIED — no camera in the corridor</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q05</div><div class="qa-q-text">Do you have any knowledge of digitalis or cardiac medication?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"None whatsoever. I'm not a medical person." <span class="flag">RECORD SHOWS: pharmacy prescription in her name for digitalis, 2022</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q06</div><div class="qa-q-text">Did you visit the study at any point during the night?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"No. The door was locked and I had no reason to disturb him."</div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q07</div><div class="qa-q-text">Is there anyone you believe had reason to harm your uncle?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"Thomas Culvert. He was stealing from the clinic for years. My uncle was about to expose him. Isn't that obvious enough?" <span class="ok">PARTIALLY CORROBORATED BY FINANCIAL RECORDS</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Culvert -->
+    <div class="interrog-panel" id="interrog-culvert">
+      <div class="interrog-header">
+        <div class="ih-avatar" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;background:rgba(76,74,183,.15);color:#9090f0;border:1px solid rgba(76,74,183,.3)">TC</div>
+        <div><div class="ih-name">Thomas Culvert</div><div class="ih-role">BUSINESS PARTNER · INTERVIEWED NOV 4TH</div></div>
+      </div>
+      <div class="qa-list">
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q01</div><div class="qa-q-text">Where were you on the night of November 2nd?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"At home. Alone. I cooked dinner, watched television, and went to bed around eleven. No one can verify that, unfortunately." <span class="flag">NO ALIBI FOR 23:00–02:00</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q02</div><div class="qa-q-text">When did you last speak to Dr. Harrow?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"On the phone, November 1st. A brief call about clinic scheduling." <span class="flag">PHONE RECORDS: 4 MINUTE CALL — NOT "BRIEF SCHEDULING"</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q03</div><div class="qa-q-text">The forensic audit has identified £40,000 in fraudulent transfers. Would you like to explain?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"This is... I had Edmund's blessing for those transfers. He was fully informed. It was a restructuring arrangement." <span class="flag">SOLICITOR CONFIRMS HARROW INTENDED TO DISSOLVE PARTNERSHIP</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q04</div><div class="qa-q-text">Do you have access to the residence?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I've been there many times for dinner and meetings. I know the property well. But I did not go there that night." <span class="flag">KNOWS GARDEN GATE AND SIDE ENTRANCE ROUTE</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q05</div><div class="qa-q-text">Do you know anything about the open safe?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"Safe? What safe? Edmund kept many things locked away. I had no interest in them."</div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q06</div><div class="qa-q-text">Did you make a call from an unregistered number on the evening of November 2nd?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I don't own a burner phone, if that's what you're implying. This is absurd." <span class="flag">REFUSED FURTHER QUESTIONING WITHOUT SOLICITOR</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q07</div><div class="qa-q-text">Are you aware of any digitalis kept at the clinic?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"We're a medical clinic. Of course we stock cardiac medications. Digitalis is standard. Anyone with access could have taken it." <span class="ok">ACCURATE — DIGITALIS IS ON CLINIC INVENTORY</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nora -->
+    <div class="interrog-panel" id="interrog-nora">
+      <div class="interrog-header">
+        <div class="ih-avatar" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;background:rgba(204,51,51,.15);color:#e07070;border:1px solid rgba(204,51,51,.3)">NP</div>
+        <div><div class="ih-name">Nora Perkins</div><div class="ih-role">HOUSEKEEPER · INTERVIEWED NOV 4TH</div></div>
+      </div>
+      <div class="qa-list">
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q01</div><div class="qa-q-text">Why did you repaint the study window latch?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"The frame was peeling. I do it every autumn. It's routine." <span class="flag">NO RECORD OF PREVIOUS REPAINTS IN MAINTENANCE LOG</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q02</div><div class="qa-q-text">What did Dr. Harrow say in the midnight call?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"He told me not to let anyone in. I've already said this." <span class="flag">CALL LASTED 2m 11s — MORE WAS SAID</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q03</div><div class="qa-q-text">What did you see at the clinic that upset Dr. Harrow?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I don't know what you mean. I've never been to the clinic." <span class="flag">NEIGHBOUR CONFIRMS SAW NORA ENTERING CLINIC ON OCT 28TH</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q04</div><div class="qa-q-text">Did anyone enter the house after Margaret Vale arrived?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"Not that I'm aware of. The front door was locked from ten o'clock." <span class="flag">GARDEN GATE HAS SEPARATE ENTRY — NORA HAS THAT KEY</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q05</div><div class="qa-q-text">Who do you think killed Dr. Harrow?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I don't think anyone killed him. He had a weak heart. The doctor said so." <span class="ok">HEART CONDITION CONFIRMED — BUT DIGITALIS TRACES UNEXPLAINED</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q06</div><div class="qa-q-text">Did you prepare his evening port wine?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I always leave a glass for him when he works late. It's part of my duties." <span class="flag">SHE PREPARED THE GLASS. SHE KNOWS ABOUT HIS HEART CONDITION.</span></div></div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q"><div><div class="qa-q-prefix">Q07</div><div class="qa-q-text">Are you hiding something about the night of the murder?</div></div><span class="qa-arrow">▼</span></div>
+          <div class="qa-answer"><div class="qa-answer-text">"I have worked in this house for twenty-eight years. I loved Dr. Harrow like family. I would never..." <em>(breaks down, refuses further questions)</em> <span class="flag">INTERVIEW SUSPENDED</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-stage">
+      <button class="btn-next" onclick="goStage(4)">PROCEED TO MAJOR TWIST →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAGE 4 ══ -->
+  <div class="stage-panel" id="stage-4">
+    <div class="stage-header">
+      <div class="stage-label">// STAGE 04 — MAJOR TWIST</div>
+      <h2 class="stage-title">Everything Changes</h2>
+      <p class="stage-intro">A new revelation has emerged. It changes the direction of the investigation entirely.</p>
+    </div>
+
+    <div class="twist-box">
+      <div class="twist-icon">⚠</div>
+      <div class="twist-title">THE REVELATION</div>
+      <div class="twist-text">The toxicology report has come back. Dr. Harrow did NOT die from digitalis poisoning.</div>
+    </div>
+
+    <div class="twist-reveal">
+      <div class="twist-reveal-label">FORENSIC PATHOLOGY REPORT — NOVEMBER 5TH</div>
+      <div class="twist-reveal-text">
+        Dr. Harrow died of a <strong>deliberate overdose of his own prescribed digitalis medication</strong> — administered in a dose five times the therapeutic threshold. However, the pathologist has confirmed that the port wine was <strong>not the delivery vehicle</strong>. The toxin was absorbed transdermally — through skin contact. The letter opener found on the floor had been <strong>coated with a concentrated digitalis solution</strong>. Dr. Harrow habitually used a letter opener — and whoever placed it on his desk that evening knew exactly what they were doing.<br><br>
+        Furthermore: <strong>the safe was not emptied by the killer.</strong> A second key to the safe has been found in a kitchen drawer — registered to Nora Perkins. The safe's contents — a handwritten letter — were removed by her <strong>before she called the police</strong>.
+      </div>
+    </div>
+
+    <div class="twist-implications">
+      <div class="ti-card">
+        <div class="ti-label">IMPLICATION A</div>
+        <div class="ti-text">The killer needed access to the study to place the coated letter opener. The study was locked — but the window latch was freshly repainted, making it impossible to verify if it had been forced.</div>
+      </div>
+      <div class="ti-card">
+        <div class="ti-label">IMPLICATION B</div>
+        <div class="ti-text">Nora Perkins had a key to the safe. She removed the letter inside before police arrived. What did that letter say — and why was she so desperate to hide it?</div>
+      </div>
+      <div class="ti-card">
+        <div class="ti-label">IMPLICATION C</div>
+        <div class="ti-text">Digitalis in concentrated liquid form is not something a layperson manufactures easily. It requires either medical knowledge or access to a medical facility — like, for instance, Harrow & Culvert Clinic.</div>
+      </div>
+      <div class="ti-card">
+        <div class="ti-label">IMPLICATION D</div>
+        <div class="ti-text">Margaret Vale lied about her knowledge of digitalis. She had a prescription in 2022. She was facing removal from the will. She was in the house that evening with unsupervised access to every room.</div>
+      </div>
+    </div>
+
+    <div class="next-stage">
+      <button class="btn-next" onclick="goStage(5)">PROCEED TO FINAL THEORY →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAGE 5 ══ -->
+  <div class="stage-panel" id="stage-5">
+    <div class="stage-header">
+      <div class="stage-label">// STAGE 05 — FINAL THEORY</div>
+      <h2 class="stage-title">Submit Your Theory</h2>
+      <p class="stage-intro">You've reviewed all the evidence. Now make your case. Every answer affects your score — choose carefully.</p>
+    </div>
+
+    <div class="theory-form" id="theory-form">
+
+      <div class="tf-block">
+        <div class="tf-num">QUESTION 01 OF 05</div>
+        <div class="tf-question">Who committed the murder?</div>
+        <div class="tf-hint">Select the person you believe killed Dr. Edmund Harrow. This is worth 100 points.</div>
+        <div class="tf-options">
+          <div class="tf-opt" onclick="selectOpt(this,'culprit','margaret')"><div class="tf-radio"></div><div class="tf-opt-text"><strong>Margaret Vale</strong> — Niece and sole heir</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'culprit','culvert')"><div class="tf-radio"></div><div class="tf-opt-text"><strong>Thomas Culvert</strong> — Business partner</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'culprit','nora')"><div class="tf-radio"></div><div class="tf-opt-text"><strong>Nora Perkins</strong> — Housekeeper</div></div>
+        </div>
+      </div>
+
+      <div class="tf-block">
+        <div class="tf-num">QUESTION 02 OF 05</div>
+        <div class="tf-question">How was the crime committed?</div>
+        <div class="tf-hint">Select the correct method. Worth 50 points.</div>
+        <div class="tf-options">
+          <div class="tf-opt" onclick="selectOpt(this,'method','wine')"><div class="tf-radio"></div><div class="tf-opt-text">Digitalis was dissolved in the port wine</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'method','opener')"><div class="tf-radio"></div><div class="tf-opt-text">The letter opener was coated with concentrated digitalis solution</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'method','pill')"><div class="tf-radio"></div><div class="tf-opt-text">The victim was forced to ingest pills</div></div>
+        </div>
+      </div>
+
+      <div class="tf-block">
+        <div class="tf-num">QUESTION 03 OF 05</div>
+        <div class="tf-question">What was the motive?</div>
+        <div class="tf-hint">What drove the killer to act? Worth 25 points.</div>
+        <div class="tf-options">
+          <div class="tf-opt" onclick="selectOpt(this,'motive','will')"><div class="tf-radio"></div><div class="tf-opt-text">To prevent removal from the inheritance</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'motive','fraud')"><div class="tf-radio"></div><div class="tf-opt-text">To stop exposure of financial fraud</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'motive','secret')"><div class="tf-radio"></div><div class="tf-opt-text">To conceal a secret that would destroy a reputation</div></div>
+        </div>
+      </div>
+
+      <div class="tf-block">
+        <div class="tf-num">QUESTION 04 OF 05</div>
+        <div class="tf-question">Which piece of evidence was most decisive?</div>
+        <div class="tf-hint">The best evidence that clinches your theory. Worth 15 points.</div>
+        <div class="tf-options">
+          <div class="tf-opt" onclick="selectOpt(this,'evidence','phone')"><div class="tf-radio"></div><div class="tf-opt-text">Phone records showing the unknown caller at 22:51</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'evidence','cctv')"><div class="tf-radio"></div><div class="tf-opt-text">CCTV footage of the unidentified figure at the garden gate (23:17)</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'evidence','financial')"><div class="tf-radio"></div><div class="tf-opt-text">Financial records showing £40,000 in fraudulent transfers</div></div>
+          <div class="tf-opt" onclick="selectOpt(this,'evidence','safe')"><div class="tf-radio"></div><div class="tf-opt-text">Nora Perkins' second key to the safe and removal of the letter</div></div>
+        </div>
+      </div>
+
+      <div class="tf-block" id="q5-block">
+        <div class="tf-num">QUESTION 05 OF 05</div>
+        <div class="tf-question">Which interrogation question was the most revealing?</div>
+        <div class="tf-hint" id="q5-hint">Select a suspect in Question 1 first — the questions will update to match your chosen culprit.</div>
+        <div class="tf-options" id="q5-options">
+          <div style="padding:18px;color:var(--muted);font-size:15px;font-style:italic;border:1px dashed var(--border);border-radius:3px;text-align:center">← Choose a culprit in Question 1 to unlock this question</div>
+        </div>
+      </div>
+
+      <button class="submit-theory" id="submit-btn" onclick="submitTheory()" disabled>SELECT ALL ANSWERS TO SUBMIT YOUR THEORY</button>
+    </div>
+
+    <!-- SCORE REVEAL -->
+    <div class="score-reveal" id="score-reveal">
+      <div class="sr-label">CASE CLOSED — YOUR RESULT</div>
+      <div class="sr-score" id="final-score">0</div>
+      <div class="sr-max">OUT OF 200 POINTS</div>
+      <div class="sr-breakdown" id="score-breakdown"></div>
+      <div class="answer-reveal">
+        <div class="ar-label">THE TRUTH — OFFICIAL SOLUTION</div>
+        <div class="ar-text">
+          <strong>Killer: Thomas Culvert.</strong> He entered via the garden gate at 23:17 using a key copied years earlier — visible on CCTV. He coated the letter opener with a digitalis solution taken from the clinic. He placed it on Harrow's desk when Harrow briefly left the room, then exited the same way. Nora Perkins discovered this in the letter Harrow had written her — instructing her to give it to the police if anything happened to him. Terrified of implicating herself, she destroyed it instead. <strong>Motive: prevention of fraud exposure and criminal prosecution.</strong>
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="landingpage-claug.html" class="btn-primary">EXPLORE MORE CASES →</a>
+        <button class="btn-outline" onclick="resetGame()" style="background:transparent;color:var(--text);border:1px solid var(--border);padding:12px 28px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer">PLAY AGAIN</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /case-main -->
+
+<script>
+var currentStage = 1;
+var answers = {};
+var correctAnswers = {
+  culprit: 'culvert',
+  method: 'opener',
+  motive: 'fraud',
+  evidence: 'cctv',
+  interrogation: 'c-alibi'
+};
+var points = { culprit:100, method:50, motive:25, evidence:15, interrogation:10 };
+
+function goStage(n) {
+  document.querySelectorAll('.stage-panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('stage-' + n).classList.add('visible');
+  document.querySelectorAll('.stage-btn').forEach((b,i) => {
+    b.classList.remove('active');
+    if (i < n-1) b.classList.add('done'); else b.classList.remove('done');
+  });
+  document.getElementById('sbtn-' + n).classList.add('active');
+  currentStage = n;
+  var pct = n * 20;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showEvidence(id) {
+  document.querySelectorAll('.ev-content').forEach(c => c.classList.remove('visible'));
+  document.querySelectorAll('.ev-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ev-' + id).classList.add('visible');
+  event.currentTarget.classList.add('active');
+}
+
+function showInterrog(id) {
+  document.querySelectorAll('.interrog-panel').forEach(p => p.classList.remove('visible'));
+  document.querySelectorAll('.it-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('interrog-' + id).classList.add('visible');
+  event.currentTarget.classList.add('active');
+}
+
+function toggleQA(el) {
+  el.classList.toggle('open');
+}
+
+var interogationOptions = {
+  margaret: [
+    { value: 'm-digitalis', text: 'Asked about digitalis knowledge — she denied it, but had a prescription (Q05)' },
+    { value: 'm-will',      text: 'Asked about the will change — she claimed not to know, contradicted by solicitor records (Q03)' },
+    { value: 'm-study',     text: 'Asked if she visited the study — she denied it despite unsupervised access (Q06)' },
+  ],
+  culvert: [
+    { value: 'c-alibi',    text: 'Asked about his alibi — he had none for the entire night (Q01)' },
+    { value: 'c-call',     text: 'Asked about the phone call — he called it "brief scheduling," records show 4 minutes (Q02)' },
+    { value: 'c-fraud',    text: 'Asked about the £40,000 transfers — claimed Harrow approved them, solicitor confirms otherwise (Q03)' },
+  ],
+  nora: [
+    { value: 'n-wine',    text: 'Asked if she prepared the port wine — she admitted she always does (Q06)' },
+    { value: 'n-window',  text: 'Asked about repainting the window latch — no prior maintenance record exists (Q01)' },
+    { value: 'n-clinic',  text: 'Asked what she saw at the clinic — denied ever going, but a neighbour saw her there (Q03)' },
+  ]
+};
+
+function updateInterrogationQ(suspect) {
+  var opts = interogationOptions[suspect];
+  var container = document.getElementById('q5-options');
+  var hint = document.getElementById('q5-hint');
+  hint.textContent = 'Which of their answers exposed the most damaging lie? Worth 10 points.';
+  var names = { margaret: 'Margaret Vale', culvert: 'Thomas Culvert', nora: 'Nora Perkins' };
+  container.innerHTML = opts.map(function(o) {
+    return '<div class="tf-opt" onclick="selectOpt(this,\'interrogation\',\'' + o.value + '\')">' +
+      '<div class="tf-radio"></div>' +
+      '<div class="tf-opt-text">' + names[suspect] + ' — ' + o.text + '</div>' +
+      '</div>';
+  }).join('');
+  // clear any prior interrogation answer since options changed
+  delete answers['interrogation'];
+  checkSubmitReady();
+}
+
+function selectOpt(el, category, value) {
+  var block = el.closest('.tf-options');
+  block.querySelectorAll('.tf-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[category] = value;
+  if (category === 'culprit') updateInterrogationQ(value);
+  checkSubmitReady();
+}
+
+function checkSubmitReady() {
+  var needed = ['culprit','method','motive','evidence','interrogation'];
+  var ready = needed.every(k => answers[k]);
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = !ready;
+  btn.textContent = ready ? 'SUBMIT YOUR FINAL THEORY →' : 'SELECT ALL ANSWERS TO SUBMIT YOUR THEORY';
+}
+
+function submitTheory() {
+  var total = 0;
+  var rows = '';
+  var labels = {culprit:'Correct culprit',method:'Correct method',motive:'Correct motive',evidence:'Best evidence',interrogation:'Key interrogation'};
+  for (var key in correctAnswers) {
+    var correct = answers[key] === correctAnswers[key];
+    var pts = correct ? points[key] : 0;
+    total += pts;
+    var cls = correct ? 'correct' : 'wrong';
+    rows += '<div class="sr-row"><span class="sr-row-label">' + labels[key] + '</span><span class="sr-row-pts ' + cls + '">' + (correct ? '+' + pts : '✗ 0') + '</span></div>';
+  }
+  document.getElementById('theory-form').style.display = 'none';
+  var reveal = document.getElementById('score-reveal');
+  reveal.classList.add('show');
+  var scoreEl = document.getElementById('final-score');
+  scoreEl.textContent = '0';
+  document.getElementById('score-breakdown').innerHTML = rows;
+  var count = 0;
+  var interval = setInterval(function() {
+    count += Math.ceil(total / 30);
+    if (count >= total) { count = total; clearInterval(interval); }
+    scoreEl.textContent = count;
+  }, 40);
+}
+
+function resetGame() {
+  answers = {};
+  document.getElementById('theory-form').style.display = 'flex';
+  document.getElementById('score-reveal').classList.remove('show');
+  document.querySelectorAll('.tf-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('q5-options').innerHTML = '<div style="padding:18px;color:var(--muted);font-size:15px;font-style:italic;border:1px dashed var(--border);border-radius:3px;text-align:center">← Choose a culprit in Question 1 to unlock this question</div>';
+  document.getElementById('q5-hint').textContent = 'Select a suspect in Question 1 first — the questions will update to match your chosen culprit.';
+  checkSubmitReady();
+  goStage(1);
+}
+</script>
+</body>
+</html>
