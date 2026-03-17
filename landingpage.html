@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Wars – Investigate. Deduce. Win.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   THEME — only edit this block to change the palette
+   ═══════════════════════════════════════════════════ */
+:root{
+  --color-bg:            #000000;
+  --color-surface:       #34363c;
+  --color-card:          #3d4047;
+  --color-border:        #4b4e56;
+  --color-accent:        #c8922a;
+  --color-accent-hover:  #e8b04a;
+  --color-text:          #e0ded6;
+  --color-text-bright:   #ffffff;
+  --color-text-muted:    #9a9ca5;
+  --color-danger:        #cc3333;
+  --color-success:       #4caf80;
+  --color-on-accent:     #1e1f22;
+  --color-nav-bg:        rgba(43,45,49,0.95);
+  --color-notepad-bg:    #3a3c41;
+  --color-notepad-bd:    #c8922a;
+}
+
+/* ═══ RESET ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--color-bg);color:var(--color-text);font-family:'Crimson Pro',Georgia,serif;min-height:100vh;overflow-x:hidden}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.blink{animation:blink 1.4s infinite}
+
+/* ═══ NAV ═══ */
+nav{position:sticky;top:0;z-index:200;border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between;padding:14px 48px;backdrop-filter:blur(8px)}
+.logo-img{height:80px;width:auto;display:block}
+.btn-nav-cta{background:var(--color-accent);border:none;color:var(--color-on-accent);padding:10px 22px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.1em;cursor:pointer;transition:background .2s}
+.btn-nav-cta:hover{background:var(--color-accent-hover)}
+
+/* ═══ BUTTONS ═══ */
+.btn-primary{background:var(--color-accent);color:var(--color-on-accent);border:none;padding:15px 34px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:var(--color-accent-hover);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--color-text);border:1px solid var(--color-border);padding:15px 34px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-outline:hover{border-color:var(--color-accent);color:var(--color-accent)}
+
+/* ═══ HERO ═══ */
+.hero{
+  position:relative;
+  min-height:90vh;
+  display:flex;
+  align-items:center;
+  padding:80px 60px;
+  overflow:hidden;
+  border-bottom:1px solid var(--color-border);
+}
+.hero-visual{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  z-index:0;
+}
+.hero-visual img{
+  width:100%;height:100%;
+  object-fit:fill;
+  display:block;
+}
+.hero > div:first-child{
+  position:relative;
+  z-index:2;
+  max-width:650px;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:linear-gradient(90deg,rgba(5,8,15,0.95) 0%,rgba(5,8,15,0.8) 35%,rgba(5,8,15,0.3) 65%,rgba(5,8,15,0.1) 100%);
+  z-index:1;
+}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.3);color:var(--color-accent);padding:6px 16px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.15em;margin-bottom:24px}
+.hero-title{font-family:'Playfair Display',serif;font-size:64px;font-weight:900;line-height:1.04;color:var(--color-text-bright);margin-bottom:22px}
+.hero-title em{color:var(--color-accent);font-style:italic}
+.hero-desc{font-size:19px;line-height:1.75;color:var(--color-text-muted);max-width:460px;margin-bottom:36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+
+/* ═══ STATS ═══ */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--color-border)}
+.stat{padding:28px 20px;text-align:center;border-right:1px solid var(--color-border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--color-accent);line-height:1}
+.stat-l{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--color-text-muted);letter-spacing:.1em;margin-top:6px}
+
+/* ═══ SECTIONS ═══ */
+.sec{padding:72px 48px;border-bottom:1px solid var(--color-border)}
+.sec-label{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--color-accent);letter-spacing:.18em;margin-bottom:12px}
+.sec-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--color-text-bright);margin-bottom:14px;line-height:1.2}
+.sec-sub{font-size:18px;color:var(--color-text-muted);max-width:560px;line-height:1.75;margin-bottom:48px}
+
+/* ═══ HOW IT WORKS — CARDS ═══ */
+.stages-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.stage-card{background:var(--color-card);border:1px solid var(--color-border);border-radius:10px;overflow:hidden;transition:transform .25s,border-color .25s;cursor:default}
+.stage-card:hover{transform:translateY(-5px);border-color:var(--color-accent)}
+
+/* image top panel — each stage has its own image + colour tint overlay */
+.stage-card-top{height:350px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;background:var(--color-card)}
+.stage-card-top img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+.stage-card-top::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1}
+
+.stage-card-num{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,.7);letter-spacing:.2em;position:relative;z-index:1}
+.stage-card-icon-big{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#fff;position:relative;z-index:1}
+.stage-card.active-stage .stage-card-icon-big{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6)}
+
+.stage-card-body{padding:18px 16px 22px}
+.stage-card-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--color-text-bright);margin-bottom:8px;line-height:1.3}
+.stage-card-desc{font-size:14px;color:var(--color-text-muted);line-height:1.6}
+
+/* ═══ SCORING ═══ */
+.scoring-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.notepad{background:var(--color-notepad-bg);border:1px solid var(--color-notepad-bd);border-radius:4px;overflow:hidden}
+.notepad-hdr{background:var(--color-accent);padding:12px 22px}
+.notepad-hdr span{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--color-on-accent);letter-spacing:.12em;font-weight:bold}
+.notepad-body{padding:4px 22px 18px}
+.np-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(200,146,42,.15);font-size:16px}
+.np-row:last-child{border-bottom:none}
+.np-pts{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--color-accent)}
+.np-pts.g{color:var(--color-success)}
+.score-cards{display:flex;flex-direction:column;gap:18px}
+.score-card{background:var(--color-card);border:1px solid var(--color-border);border-left:3px solid var(--color-accent);border-radius:4px;padding:20px 22px}
+.score-card-t{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--color-accent);letter-spacing:.12em;margin-bottom:8px}
+.score-card-d{font-size:15px;color:var(--color-text-muted);line-height:1.65}
+
+/* ═══ INLINE SIGNUP SECTION ═══ */
+.signup-sec{padding:72px 48px;border-bottom:1px solid var(--color-border)}
+.signup-sec-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;max-width:1100px;margin:0 auto}
+.signup-sec-left .sec-title{margin-bottom:12px}
+.signup-sec-left p{font-size:17px;color:var(--color-text-muted);line-height:1.75;max-width:420px}
+.signup-form-box{background:var(--color-card);border:1px solid var(--color-border);border-radius:8px;padding:36px}
+.signup-form-logo{height:48px;width:auto;display:block;margin:0 auto 20px}
+.signup-form-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--color-text-bright);font-weight:700;text-align:center;margin-bottom:4px}
+.signup-form-sub{font-size:11px;color:var(--color-text-muted);text-align:center;font-family:'Share Tech Mono',monospace;letter-spacing:.08em;margin-bottom:24px}
+.signup-field{margin-bottom:14px}
+.signup-label{display:block;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--color-text-muted);letter-spacing:.14em;margin-bottom:6px}
+.signup-input{width:100%;background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text-bright);padding:12px 14px;border-radius:4px;font-family:'Crimson Pro',Georgia,serif;font-size:16px;outline:none;transition:border-color .2s}
+.signup-input:focus{border-color:var(--color-accent)}
+.signup-input::placeholder{color:var(--color-text-muted);font-size:15px}
+.signup-submit-btn{width:100%;background:var(--color-accent);color:var(--color-on-accent);border:none;padding:15px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.12em;cursor:pointer;border-radius:4px;margin-top:8px;transition:background .2s}
+.signup-submit-btn:hover{background:var(--color-accent-hover)}
+.signup-form-divider{display:flex;align-items:center;gap:12px;margin:18px 0}
+.signup-form-divider::before,.signup-form-divider::after{content:'';flex:1;height:1px;background:var(--color-border)}
+.signup-form-divider span{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--color-text-muted);letter-spacing:.1em;white-space:nowrap}
+.signup-form-login{text-align:center;font-size:14px;color:var(--color-text-muted)}
+.signup-form-login a{color:var(--color-accent);cursor:pointer;text-decoration:none}
+.signup-form-login a:hover{color:var(--color-accent-hover)}
+.inline-signup-msg{font-family:'Share Tech Mono',monospace;font-size:11px;text-align:center;margin-top:10px;min-height:16px;letter-spacing:.06em}
+.inline-signup-msg.error{color:var(--color-danger)}
+.inline-signup-msg.ok{color:var(--color-success)}
+
+/* ═══ AI CREATOR ═══ */
+.ai-sec{padding:80px 48px;border-bottom:1px solid var(--color-border);position:relative;overflow:hidden}
+.ai-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 30% 50%,rgba(200,146,42,.05) 0%,transparent 70%);pointer-events:none}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.ai-features{display:flex;flex-direction:column;gap:22px;margin-top:36px}
+.ai-feature{display:flex;gap:18px;align-items:flex-start}
+.ai-icon{width:42px;height:42px;border-radius:3px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;color:var(--color-accent)}
+.ai-feat-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--color-text-bright);font-weight:700;margin-bottom:5px}
+.ai-feat-desc{font-size:15px;color:var(--color-text-muted);line-height:1.65}
+.ai-badge{display:inline-block;background:rgba(76,175,128,.1);border:1px solid rgba(76,175,128,.3);color:var(--color-success);font-family:'Share Tech Mono',monospace;font-size:12px;padding:5px 14px;letter-spacing:.12em;border-radius:2px;margin-bottom:16px}
+.ai-img-wrap{border-radius:4px;overflow:hidden;border:1px solid var(--color-border);position:relative}
+.ai-img-wrap img{width:100%;display:block;object-fit:cover}
+.ai-img-tag{position:absolute;top:14px;left:14px;background:var(--color-accent);color:var(--color-on-accent);font-family:'Share Tech Mono',monospace;font-size:9px;padding:3px 10px;letter-spacing:.14em}
+
+/* ═══ CTA ═══ */
+.cta-sec{padding:90px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(200,146,42,.06) 0%,transparent 70%);pointer-events:none}
+.cta-title{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--color-text-bright);margin-bottom:14px;line-height:1.1;position:relative}
+.cta-sub{font-size:18px;color:var(--color-text-muted);margin-bottom:40px;position:relative}
+.cta-acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ═══ FOOTER ═══ */
+footer{padding:24px 48px;border-top:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center}
+.footer-logo img{height:80px;width:auto;display:block}
+.foot-copy{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--color-text-muted);letter-spacing:.08em}
+
+/* ═══ PAYWALL MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--color-card);border:1px solid var(--color-border);border-radius:4px;max-width:440px;width:100%;padding:36px;position:relative}
+.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--color-text-muted);font-size:20px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--color-text-bright)}
+.modal-tag{display:inline-block;background:var(--color-accent);color:var(--color-on-accent);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:.12em;margin-bottom:16px}
+.modal-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--color-text-bright);margin-bottom:12px;line-height:1.25}
+.modal-desc{font-size:16px;color:var(--color-text-muted);line-height:1.65;margin-bottom:24px}
+.modal-price{font-family:'Playfair Display',serif;font-size:38px;color:var(--color-accent);margin-bottom:6px}
+.modal-price-note{font-size:14px;color:var(--color-text-muted);margin-bottom:28px}
+.modal-btn{width:100%;background:var(--color-accent);color:var(--color-on-accent);border:none;padding:14px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;cursor:pointer;border-radius:2px;transition:background .2s;margin-bottom:10px}
+.modal-btn:hover{background:var(--color-accent-hover)}
+.modal-cancel{width:100%;background:transparent;color:var(--color-text-muted);border:1px solid var(--color-border);padding:12px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.08em;cursor:pointer;border-radius:2px;transition:all .2s}
+.modal-cancel:hover{color:var(--color-text);border-color:var(--color-text)}
+
+/* ═══ SIGN UP FLOATING MODAL (nav button) ═══ */
+.signup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.signup-overlay.open{display:flex}
+.signup-modal{background:var(--color-card);border:1px solid var(--color-border);border-radius:4px;max-width:420px;width:100%;padding:40px;position:relative}
+.signup-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--color-text-muted);font-size:20px;cursor:pointer;line-height:1}
+.signup-close:hover{color:var(--color-text-bright)}
+.signup-logo{height:80px;width:auto;display:block;margin:0 auto 24px}
+.signup-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--color-text-bright);font-weight:700;text-align:center;margin-bottom:6px}
+.signup-sub{font-size:12px;color:var(--color-text-muted);text-align:center;font-family:'Share Tech Mono',monospace;letter-spacing:.08em;margin-bottom:28px}
+.signup-field{margin-bottom:16px}
+.signup-label{display:block;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--color-text-muted);letter-spacing:.14em;margin-bottom:7px}
+.signup-input{width:100%;background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text-bright);padding:13px 16px;border-radius:2px;font-family:'Crimson Pro',Georgia,serif;font-size:16px;outline:none;transition:border-color .2s}
+.signup-input:focus{border-color:var(--color-accent)}
+.signup-input::placeholder{color:var(--color-text-muted);font-size:15px}
+.signup-btn{width:100%;background:var(--color-accent);color:var(--color-on-accent);border:none;padding:15px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.12em;cursor:pointer;border-radius:2px;margin-top:8px;transition:background .2s}
+.signup-btn:hover{background:var(--color-accent-hover)}
+.signup-divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.signup-divider::before,.signup-divider::after{content:'';flex:1;height:1px;background:var(--color-border)}
+.signup-divider span{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--color-text-muted);letter-spacing:.1em;white-space:nowrap}
+.signup-login-link{text-align:center;font-size:14px;color:var(--color-text-muted)}
+.signup-login-link a{color:var(--color-accent);cursor:pointer;text-decoration:none}
+.signup-login-link a:hover{color:var(--color-accent-hover)}
+.signup-msg{font-family:'Share Tech Mono',monospace;font-size:11px;text-align:center;margin-top:12px;min-height:18px;letter-spacing:.06em}
+.signup-msg.error{color:var(--color-danger)}
+.signup-msg.ok{color:var(--color-success)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1100px){
+  .stages-cards{grid-template-columns:repeat(3,1fr)}
+  .signup-sec-inner{grid-template-columns:1fr}
+  .signup-sec-left p{max-width:100%}
+}
+@media(max-width:900px){
+  nav{padding:12px 20px}
+  .hero{padding:60px 25px;min-height:75vh}
+  .hero > div:first-child{max-width:100%}
+  .hero-title{font-size:38px}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .sec{padding:48px 24px}
+  .stages-cards{grid-template-columns:repeat(2,1fr)}
+  .scoring-wrap{grid-template-columns:1fr}
+  .ai-sec{padding:56px 24px}
+  .ai-grid{grid-template-columns:1fr}
+  .signup-sec{padding:48px 24px}
+  .cta-sec{padding:60px 24px}
+  footer{padding:20px 24px;flex-direction:column;gap:12px;text-align:center}
+}
+@media(max-width:480px){
+  .hero{min-height:75vh;padding:50px 20px}
+  .hero-title{font-size:34px}
+  .stages-cards{grid-template-columns:1fr}
+}
+#stage-title{
+  background: var(--color-accent);
+  font-size: 20px;
+  margin-bottom: 10px;
+  width: 120px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav>
+  <a href="#"><img src="logo.png" alt="Mystery Wars" class="logo-img"></a>
+  <button class="btn-nav-cta" onclick="openSignup()">SIGN UP</button>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow"><span class="blink">●</span> LIVE INVESTIGATION ACTIVE</div>
+    <h1 class="hero-title">The <em>Truth</em><br>Rewards the<br>Sharpest Mind.</h1>
+    <p class="hero-desc">Investigate fictional crimes stage by stage. Decode clues, interrogate suspects, and submit your theory before the competition does.</p>
+    <div class="hero-actions">
+      <a href="#how-it-works" class="btn-outline">BROWSE ALL CASES</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img src="hero.png" alt="Mystery Wars — Case Board">
+  </div>
+</section>
+
+<!-- ═══════════════════ STATS ═══════════════════ -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-n">12,400+</div><div class="stat-l">ACTIVE DETECTIVES</div></div>
+  <div class="stat"><div class="stat-n">340</div><div class="stat-l">CASES SOLVED</div></div>
+  <div class="stat"><div class="stat-n">5</div><div class="stat-l">STAGES PER CASE</div></div>
+  <div class="stat"><div class="stat-n">$5</div><div class="stat-l">PER PREMIUM CASE</div></div>
+</div>
+
+<!-- ═══════════════════ HOW IT WORKS ═══════════════════ -->
+<section class="sec" id="how-it-works">
+  <div class="sec-label">// HOW IT WORKS</div>
+  <h2 class="sec-title">Five Stages. One Killer.</h2>
+  <p class="sec-sub">Each case unfolds across five stages. New evidence, new contradictions, and one explosive twist — before you submit your final theory.</p>
+
+  <div class="stages-cards">
+
+    <!-- Stage 1 -->
+    <div class="stage-card">
+      <div class="stage-card-top s1">
+        <img src="stage1.png" alt="Crime Discovered">
+      </div>
+      <div class="stage-card-body">
+        <div class="stage-card-num" id="stage-title">STAGE 01</div>
+        <div class="stage-card-name">Crime Discovered</div>
+        <div class="stage-card-desc">The case file opens. You receive the crime description, initial suspects, and the first pieces of evidence left at the scene.</div>
+      </div>
+    </div>
+
+    <!-- Stage 2 -->
+    <div class="stage-card">
+      <div class="stage-card-top s2">
+        <img src="stage2.png" alt="New Evidence">
+     
+      </div>
+      <div class="stage-card-body">
+        <div class="stage-card-num" id="stage-title">STAGE 02</div>
+        <div class="stage-card-name">New Evidence</div>
+        <div class="stage-card-desc">Phone records, CCTV footage, financial logs, and witness statements surface. Study each piece — contradictions are hiding in plain sight.</div>
+      </div>
+    </div>
+
+    <!-- Stage 3 -->
+    <div class="stage-card active-stage">
+      <div class="stage-card-top s3">
+        <img src="stage3.png" alt="Interrogations">
+        
+      </div>
+      <div class="stage-card-body">
+        <div class="stage-card-num" id="stage-title">STAGE 03</div>
+        <div class="stage-card-name">Interrogations</div>
+        <div class="stage-card-desc">All suspects are brought in for questioning. Read their answers carefully — someone is lying, and the right question will expose them.</div>
+      </div>
+    </div>
+
+    <!-- Stage 4 -->
+    <div class="stage-card">
+      <div class="stage-card-top s4">
+        <img src="stage4.png" alt="Major Twist">
+        
+      </div>
+      <div class="stage-card-body">
+        <div class="stage-card-num" id="stage-title">STAGE 04</div>
+        <div class="stage-card-name">Major Twist</div>
+        <div class="stage-card-desc">An unexpected revelation changes everything. The direction of the investigation shifts — and everything you thought you knew is now in question.</div>
+      </div>
+    </div>
+
+    <!-- Stage 5 -->
+    <div class="stage-card">
+      <div class="stage-card-top s5">
+        <img src="stage5.png" alt="Final Theory">
+        
+      </div>
+      <div class="stage-card-body">
+        <div class="stage-card-num" id="stage-title">STAGE 05</div>
+        <div class="stage-card-name">Final Theory</div>
+        <div class="stage-card-desc">Submit your complete theory — culprit, method, motive, and the evidence that clinches it. Your score is calculated instantly.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ SCORING ═══════════════════ -->
+<section class="sec" id="scoring">
+  <div class="sec-label">// SCORING SYSTEM</div>
+  <h2 class="sec-title">Reward the Sharpest Deduction.</h2>
+  <p class="sec-sub">Points are earned for accuracy and quality of reasoning. Pick the right culprit, method, motive — and back it up with the best evidence.</p>
+  <div class="scoring-wrap">
+    <div class="notepad">
+      <div class="notepad-hdr"><span>DETECTIVE SCORECARD</span></div>
+      <div class="notepad-body">
+        <div class="np-row"><span>Correct culprit identified</span><span class="np-pts">100 PTS</span></div>
+        <div class="np-row"><span>Correct method deduced</span><span class="np-pts">50 PTS</span></div>
+        <div class="np-row"><span>Correct motive established</span><span class="np-pts">25 PTS</span></div>
+        <div class="np-row"><span>Best supporting evidence selected</span><span class="np-pts">15 PTS</span></div>
+        <div class="np-row"><span>Key interrogation identified</span><span class="np-pts">10 PTS</span></div>
+        <div class="np-row"><span>Early correct theory bonus</span><span class="np-pts g">+ BONUS</span></div>
+        <div class="np-row"><span>Top community theory voted</span><span class="np-pts g">+ BONUS</span></div>
+      </div>
+    </div>
+    <div class="score-cards">
+      <div class="score-card">
+        <div class="score-card-t">EVIDENCE QUALITY</div>
+        <div class="score-card-d">Picking the most decisive evidence earns you more points. Selecting phone records when CCTV was clearer? That costs you precision marks.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-card-t">INTERROGATION INSIGHT</div>
+        <div class="score-card-d">Which question broke the suspect? Identifying the right contradiction in the interrogation adds to your total score.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-card-t">SPEED BONUS</div>
+        <div class="score-card-d">Submit a correct theory before most players and earn a speed multiplier. Early detectives win the most.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ INLINE SIGN UP ═══════════════════ -->
+<section class="signup-sec" id="signup">
+  <div class="signup-sec-inner">
+
+    <div class="signup-sec-left">
+      <div class="sec-label">// JOIN THE INVESTIGATION</div>
+      <h2 class="sec-title">Start Solving.<br>It's Free.</h2>
+      <p>Create your detective account in seconds. No credit card, no commitment. Access cases, track your scores, and compete with thousands of investigators worldwide.</p>
+    </div>
+
+    <div class="signup-form-box">
+      <img src="logo.png" alt="Mystery Wars" class="signup-form-logo">
+      <div class="signup-form-title">SIGN UP</div>
+      <div class="signup-form-sub">DETECTIVE REGISTRATION — FREE</div>
+
+      <div class="signup-field">
+        <label class="signup-label">EMAIL ADDRESS</label>
+        <input type="email" class="signup-input" placeholder="you@example.com" id="inline-email">
+      </div>
+      <div class="signup-field">
+        <label class="signup-label">PASSWORD</label>
+        <input type="password" class="signup-input" placeholder="Minimum 8 characters" id="inline-password">
+      </div>
+      <div class="signup-field">
+        <label class="signup-label">CONFIRM PASSWORD</label>
+        <input type="password" class="signup-input" placeholder="Repeat your password" id="inline-confirm">
+      </div>
+
+      <button class="signup-submit-btn" onclick="handleInlineSignup()">CREATE FREE ACCOUNT →</button>
+      <div class="inline-signup-msg" id="inline-signup-msg"></div>
+
+      <div class="signup-form-divider"><span>ALREADY A DETECTIVE?</span></div>
+      <div class="signup-form-login">Already have an account? <a href="#">Sign in here</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ AI CREATOR ═══════════════════ -->
+<section class="ai-sec" id="create">
+  <div class="ai-grid">
+    <div>
+      <div class="ai-badge">NEW — AI POWERED</div>
+      <div class="sec-label" style="margin-bottom:12px">// CREATE YOUR OWN MYSTERY</div>
+      <h2 class="sec-title" style="margin-bottom:16px">Build a Case.<br>Stump the World.</h2>
+      <p style="font-size:18px;color:var(--color-text-muted);line-height:1.75;max-width:460px;margin-bottom:0">Have a mystery idea? Our AI tools help you craft airtight cases — complete with suspects, evidence, interrogations, and perfectly-timed twists. Publish it and let the community try to crack it.</p>
+      <div class="ai-features">
+        <div class="ai-feature">
+          <div class="ai-icon">◈</div>
+          <div>
+            <div class="ai-feat-title">Suspect &amp; Motive Generator</div>
+            <div class="ai-feat-desc">AI builds complex characters with backstories, secrets, and believable motives — ready to be interrogated.</div>
+          </div>
+        </div>
+        <div class="ai-feature">
+          <div class="ai-icon">◉</div>
+          <div>
+            <div class="ai-feat-title">Evidence Scheduler</div>
+            <div class="ai-feat-desc">Arrange your clues across all 5 stages. Control exactly what detectives see — and when they see it.</div>
+          </div>
+        </div>
+        <div class="ai-feature">
+          <div class="ai-icon">◎</div>
+          <div>
+            <div class="ai-feat-title">Twist Engine</div>
+            <div class="ai-feat-desc">Generate an unexpected Stage 4 revelation that reframes earlier clues without breaking the logic of your case.</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" style="margin-top:36px">START CREATING — COMING SOON</button>
+    </div>
+    <div class="ai-img-wrap">
+      <div class="ai-img-tag">AI MYSTERY CREATOR</div>
+      <img src="aicase.png" alt="AI Mystery Creator">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CTA ═══════════════════ -->
+<section class="cta-sec">
+  <h2 class="cta-title">Your First Case<br>Is Waiting.</h2>
+  <p class="cta-sub">Join 12,000+ detectives. Sign up free — no credit card required.</p>
+  <div class="cta-acts">
+    <button class="btn-primary" onclick="openSignup()">CREATE FREE ACCOUNT →</button>
+    <a href="#how-it-works" class="btn-outline">HOW IT WORKS</a>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="footer-logo"><img src="logo.png" alt="Mystery Wars"></div>
+  <div class="foot-copy">© 2026 MYSTERYWARS · ALL CASES ARE FICTIONAL</div>
+</footer>
+
+<!-- ═══════════════════ PAYWALL MODAL ═══════════════════ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tag">PREMIUM CASE</div>
+    <h3 class="modal-title" id="modal-title"></h3>
+    <p class="modal-desc" id="modal-desc"></p>
+    <div class="modal-price">$5</div>
+    <div class="modal-price-note">One-time unlock · All 5 stages included · Instant access</div>
+    <button class="modal-btn">UNLOCK &amp; SOLVE THIS CASE</button>
+    <button class="modal-cancel" onclick="closeModal()">CANCEL — BACK TO CASES</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FLOATING SIGN UP MODAL (nav button) ═══════════════════ -->
+<div class="signup-overlay" id="signup-overlay">
+  <div class="signup-modal">
+    <button class="signup-close" onclick="closeSignup()">✕</button>
+    <img src="logo.png" alt="Mystery Wars" class="signup-logo">
+    <div class="signup-title">Join Mystery Wars</div>
+    <div class="signup-sub">CREATE YOUR DETECTIVE ACCOUNT</div>
+    <div class="signup-field">
+      <label class="signup-label">EMAIL ADDRESS</label>
+      <input type="email" class="signup-input" placeholder="you@example.com" id="modal-email">
+    </div>
+    <div class="signup-field">
+      <label class="signup-label">PASSWORD</label>
+      <input type="password" class="signup-input" placeholder="Minimum 8 characters" id="modal-password">
+    </div>
+    <div class="signup-field">
+      <label class="signup-label">CONFIRM PASSWORD</label>
+      <input type="password" class="signup-input" placeholder="Repeat your password" id="modal-confirm">
+    </div>
+    <button class="signup-btn" onclick="handleModalSignup()">CREATE ACCOUNT — FREE</button>
+    <div class="signup-msg" id="modal-signup-msg"></div>
+    <div class="signup-divider"><span>ALREADY A DETECTIVE?</span></div>
+    <div class="signup-login-link">Already have an account? <a onclick="closeSignup()">Sign in here</a></div>
+  </div>
+</div>
+
+<script>
+/* ─── PAYWALL MODAL ─── */
+function openModal(title, desc) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-desc').textContent = desc;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+/* ─── FLOATING SIGNUP MODAL ─── */
+function openSignup() {
+  document.getElementById('signup-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSignup() {
+  document.getElementById('signup-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('modal-signup-msg').textContent = '';
+  document.getElementById('modal-signup-msg').className = 'signup-msg';
+}
+document.getElementById('signup-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeSignup();
+});
+
+/* ─── SHARED VALIDATION ─── */
+function validateSignup(email, password, confirm) {
+  if (!email || !password || !confirm) return 'Please fill in all fields.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Please enter a valid email address.';
+  if (password.length < 8) return 'Password must be at least 8 characters.';
+  if (password !== confirm) return 'Passwords do not match.';
+  return null;
+}
+
+/* ─── MODAL SIGNUP HANDLER ─── */
+function handleModalSignup() {
+  var email    = document.getElementById('modal-email').value.trim();
+  var password = document.getElementById('modal-password').value;
+  var confirm  = document.getElementById('modal-confirm').value;
+  var msg      = document.getElementById('modal-signup-msg');
+  var error    = validateSignup(email, password, confirm);
+  if (error) {
+    msg.className = 'signup-msg error';
+    msg.textContent = error;
+    return;
+  }
+  /* ── wire up your backend / auth here ── */
+  msg.className = 'signup-msg ok';
+  msg.textContent = 'ACCOUNT CREATED — WELCOME, DETECTIVE.';
+  setTimeout(closeSignup, 1800);
+}
+
+/* ─── INLINE SIGNUP HANDLER ─── */
+function handleInlineSignup() {
+  var email    = document.getElementById('inline-email').value.trim();
+  var password = document.getElementById('inline-password').value;
+  var confirm  = document.getElementById('inline-confirm').value;
+  var msg      = document.getElementById('inline-signup-msg');
+  var error    = validateSignup(email, password, confirm);
+  if (error) {
+    msg.className = 'inline-signup-msg error';
+    msg.textContent = error;
+    return;
+  }
+  /* ── wire up your backend / auth here ── */
+  msg.className = 'inline-signup-msg ok';
+  msg.textContent = 'ACCOUNT CREATED — WELCOME, DETECTIVE.';
+  document.getElementById('inline-email').value = '';
+  document.getElementById('inline-password').value = '';
+  document.getElementById('inline-confirm').value = '';
+}
+</script>
+</body>
+</html>
